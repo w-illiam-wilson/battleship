@@ -1,9 +1,10 @@
-import { Module } from '@nestjs/common';
-import { ClsModule } from 'nestjs-cls';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HistoryModule } from './history/history.module';
 import { AuthenticationsModule } from './authentications/authentications.module';
 import { PlayModule } from './play/play.module';
+import { SessionMiddleware } from './authentications/middleware/session.middleware';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { PlayModule } from './play/play.module';
 
     ClsModule.forRoot({
       global: true,
-      middleware: { mount: true },
+      middleware: { mount: false },
   }),
     TypeOrmModule.forRoot({
       type: 'postgres',
@@ -26,4 +27,11 @@ import { PlayModule } from './play/play.module';
     }),
   ],
 })
-export class AppModule { }
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ClsMiddleware, SessionMiddleware)
+      .exclude("authentications/(.*)")
+      .forRoutes('*');
+  }
+}
