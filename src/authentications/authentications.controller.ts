@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Login } from './entities/login.entity';
 import { CurrentMatches } from './entities/current-matches.entity';
-import { AuthenticationsService } from './login.service';
+import { AuthenticationsService } from './authentications.service';
 
 @Controller("/authentications")
 export class AuthenticationsController {

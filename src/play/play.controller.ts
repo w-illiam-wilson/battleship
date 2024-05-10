@@ -10,7 +10,7 @@ export class PlayController {
 
   @Post("/start")
   startGame(
-    @Query("playerOne") opponent: string,
+    @Query("opponent") opponent: string,
   ): string {
     //creates a match and sets up board with nothing in it
     return "";
