@@ -12,7 +12,7 @@ export class HistoryController {
     return this.historyService.getLeaderboard(limit);
   }
 
-  @Get("/history")
+  @Get("/matches")
   getHistory(
     @Query("user") userId: string,
     @Query("limit") limit?: number
