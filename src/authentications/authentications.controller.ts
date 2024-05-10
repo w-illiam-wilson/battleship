@@ -1,4 +1,5 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
+import { Response } from 'express';
 import { Login } from './entities/login.entity';
 import { CurrentMatches } from './entities/current-matches.entity';
 import { AuthenticationsService } from './authentications.service';
@@ -8,12 +9,11 @@ export class AuthenticationsController {
   constructor(private readonly loginService: AuthenticationsService) {}
 
   @Post("/login")
-  login(
-    @Body() login: Login
-  ): CurrentMatches {
-    //attaches SESSION_TOKEN cookie open token object with user_id
-    //also returns current open matches
-    return 
+  async login(
+    @Body() login: Login,
+    @Res({ passthrough: true }) response: Response
+  ): Promise<CurrentMatches> {
+    return await this.loginService.login(login, response);
   }
 
   @Post("/logout")
