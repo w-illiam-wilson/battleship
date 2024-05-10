@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { ClsModule } from 'nestjs-cls';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HistoryModule } from './history/history.module';
 import { AuthenticationsModule } from './authentications/authentications.module';
