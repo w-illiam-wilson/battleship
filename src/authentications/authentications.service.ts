@@ -18,7 +18,14 @@ export class AuthenticationsService {
     return {"currentMatches": []}
   }
 
-  getHistory(userId: string, limit?: number): string {
-    return 'Hello World!';
+  async logout(
+    response: Response
+  ) {
+    //it should also send this session to a ticket server to invalidate
+    response.cookie('SESSION_TOKEN', "", {
+      maxAge: 0
+    })
+    
+    return {"currentMatches": []}
   }
 }

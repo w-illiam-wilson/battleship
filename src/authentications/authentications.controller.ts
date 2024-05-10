@@ -17,9 +17,10 @@ export class AuthenticationsController {
   }
 
   @Post("/logout")
-  logout(
-  ): string {
+  async logout(
+    @Res({ passthrough: true }) response: Response
+  ) {
     //clears SESSION_TOKEN and invalidates session id on ticket server
-    return ""
+    await this.loginService.logout(response);
   }
 }
