@@ -9,8 +9,6 @@ import { HistoryModule } from './history/history.module';
       type: 'postgres',
       host: 'localhost',
       port: 5433,
-      password: 'simform',
-      username: 'williamwilson',
       entities: [],
       database: 'williamwilson',
       synchronize: true,
