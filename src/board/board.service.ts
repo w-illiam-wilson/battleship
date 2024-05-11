@@ -22,6 +22,11 @@ export class BoardService {
 
   async fireMissile(matchId, missile: MissileDTO): Promise<OpponentBoard | string> {
     const scores = await this.getScores(matchId);
+    try {
+      await this.getBoards(matchId)
+    } catch {
+      throw new HttpException("Boards haven't been set up yet", HttpStatus.FORBIDDEN)
+    }
     if (scores.you == 18 || scores.opponent == 18) {
       throw new HttpException("Game has already finished", HttpStatus.FORBIDDEN)
     }
