@@ -7,8 +7,9 @@ export class CreateMatchDTO {
 
 export class MatchDTO {
     match_id: string;
-    opponent: string;
-    your_turn: boolean;
+    player_one: string;
+    player_two: string
+    player_one_turn: boolean;
 }
 
 export class MatchHistoryDTO {
