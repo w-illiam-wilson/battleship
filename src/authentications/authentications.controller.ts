@@ -1,26 +1,32 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { Login } from './entities/login.entity';
-import { CurrentMatches } from './entities/current-matches.entity';
+import { UserDTO } from './entities/user-dto';
 import { AuthenticationsService } from './authentications.service';
 
 @Controller("/authentications")
 export class AuthenticationsController {
-  constructor(private readonly loginService: AuthenticationsService) {}
+  constructor(private readonly authenticationsService: AuthenticationsService) {}
 
   @Post("/login")
   async login(
-    @Body() login: Login,
+    @Body() userDTO: UserDTO,
     @Res({ passthrough: true }) response: Response
-  ): Promise<CurrentMatches> {
-    return await this.loginService.login(login, response);
+  ): Promise<string> {
+    return await this.authenticationsService.login(userDTO, response);
   }
 
+  @Post("/create")
+  async createUser(
+    @Body() userDTO: UserDTO,
+  ): Promise<string> {
+    return await this.authenticationsService.createUser(userDTO);
+  }
+  
   @Post("/logout")
   async logout(
     @Res({ passthrough: true }) response: Response
   ) {
     //clears SESSION_TOKEN and invalidates session id on ticket server
-    await this.loginService.logout(response);
+    await this.authenticationsService.logout(response);
   }
 }
