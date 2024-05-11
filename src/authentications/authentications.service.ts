@@ -38,7 +38,6 @@ export class AuthenticationsService {
 
   async createUser(createUserDto: UserDTO): Promise<string> {
     const { userId, password } = createUserDto;
-    console.log(createUserDto)
     const newUser = new User();
     newUser.user_id = userId;
     newUser.password = await encrypt(password);

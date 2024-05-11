@@ -1,7 +1,6 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { SetupDTO } from './entities/setup-dto.entity';
-import { IsNotEmpty } from 'class-validator';
 import { ShipPiece } from './entities/ship.enum';
 
 @Controller("/board")

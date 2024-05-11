@@ -5,48 +5,57 @@ import { ClsService } from 'nestjs-cls';
 import { Board } from './entities/board-table.entity';
 import { SetupDTO } from './entities/setup-dto.entity';
 import { Ship, ShipPiece } from './entities/ship.enum';
+import { Match } from 'src/match/entities/match-table.entity';
 
 @Injectable()
 export class BoardService {
   constructor(
     @InjectRepository(Board)
-    private matchRepository: Repository<Board>,
+    private boardRepository: Repository<Board>,
+    @InjectRepository(Match)
+    private matchRepository: Repository<Match>,
     private readonly clsService: ClsService
   ) { }
 
   async setupBoard(matchId, setup: SetupDTO): Promise<ShipPiece[][]> {
-    return this.validatePositions(setup)
-    // return ""
-    // const user_id = this.clsService.get("userId");
-    // const player_two = opponent;
-    // const newBoard = new Board();
-    // for 
-
-    // newMatch.player_one = player_one;
-    //   newMatch.player_two = player_two;
-
-    // const createdMatch = await this.matchRepository.save(newMatch);
-    // return createdMatch.match_id;
+    const userId = this.clsService.get("userId")
+    const battleshipBoard = this.fillBoard(setup);
+    const boardPieces: Board[] = []
+    battleshipBoard.forEach((row, rowNumber) => {
+      row.forEach((_, columnNumber) => {
+        const newBoardPiece = new Board(this.matchRepository);
+        newBoardPiece.match_id = matchId;
+        newBoardPiece.user_id = userId;
+        newBoardPiece.row_number = rowNumber;
+        newBoardPiece.column_number = columnNumber;
+        newBoardPiece.piece = battleshipBoard[rowNumber][columnNumber];
+        boardPieces.push(newBoardPiece)
+      })
+    });
+    try {
+      await this.boardRepository.save(boardPieces)
+    } catch (e) {
+      throw new HttpException("Match id isn't correct or isn't assigned to your user", HttpStatus.BAD_REQUEST)
+    }
+   
+    return battleshipBoard;
   }
 
-  validatePositions(setup: SetupDTO) {
+  private fillBoard(setup: SetupDTO) {
     const positionArray: ShipPiece[][] = Array.from({ length: 10 }, () => Array(10).fill(null));
-    // positionArray[setup.A.x][setup.A.y] = true
-    //A has five positions
     try {
-      this.fillBoard(setup.A.position, setup.A.row, setup.A.column, positionArray, Ship.A);
-      this.fillBoard(setup.B.position, setup.B.row, setup.B.column, positionArray, Ship.B);
-      this.fillBoard(setup.C.position, setup.C.row, setup.C.column, positionArray, Ship.C);
-      this.fillBoard(setup.D.position, setup.D.row, setup.D.column, positionArray, Ship.D);
-      this.fillBoard(setup.E.position, setup.E.row, setup.E.column, positionArray, Ship.E);
+      this.placeShip(setup.A.position, setup.A.row, setup.A.column, positionArray, Ship.A);
+      this.placeShip(setup.B.position, setup.B.row, setup.B.column, positionArray, Ship.B);
+      this.placeShip(setup.C.position, setup.C.row, setup.C.column, positionArray, Ship.C);
+      this.placeShip(setup.D.position, setup.D.row, setup.D.column, positionArray, Ship.D);
+      this.placeShip(setup.E.position, setup.E.row, setup.E.column, positionArray, Ship.E);
     } catch (e) {
-      console.log(e)
       throw new HttpException('Ships overlap or go off the board in this setup', HttpStatus.BAD_REQUEST);
     }
-    return positionArray
+    return positionArray;
   }
 
-  private fillBoard(position: "DOWN" | "RIGHT", row: number, column: number, boatArray: ShipPiece[][], ship: any) {
+  private placeShip(position: "DOWN" | "RIGHT", row: number, column: number, boatArray: ShipPiece[][], ship: any) {
     const shipLength = ship.length;
     const shipName = ship.name; 
 
@@ -57,12 +66,10 @@ export class BoardService {
     if (row < 0 || row > maxRowPosition || column < 0 || column > maxColumnPosition) {
       throw new Error("Starting position is out of bounds")
     }
-    console.log(position)
 
     let boatPosition = 1;
     if (position === "DOWN") {
       for (let i = row; i < row + shipLength; i++) {
-        console.log(i)
         // Check if the position is within the bounds of the array
         if (i > maxRowPosition) {
           throw new Error("Reached the bottom edge of the array");
@@ -77,7 +84,6 @@ export class BoardService {
     } else if (position === "RIGHT") {
       // Fill rightwards from the starting position
       for (let j = column; j < column + shipLength; j++) {
-        console.log(j)
         // Check if the next position is within the bounds of the array
         if (j > maxColumnPosition) {
           throw new Error("Reached the right edge of the array");
@@ -89,7 +95,6 @@ export class BoardService {
         boatArray[row][j] = ShipPiece[`${shipName}${boatPosition}`];;
         boatPosition += 1;
       }
-      console.log(position)
     }
   }
 
