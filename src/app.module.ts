@@ -1,18 +1,19 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { HistoryModule } from './match/match.module';
+import { MatchModule } from './match/match.module';
 import { AuthenticationsModule } from './authentications/authentications.module';
-import { PlayModule } from './play/play.module';
 import { SessionMiddleware } from './authentications/middleware/session.middleware';
 import { User } from './authentications/entities/user-table.entity';
 import { Match } from './match/entities/match-table.entity';
+import { BoardModule } from './board/board.module';
+import { Board } from './board/entities/board-table.entity';
 
 @Module({
   imports: [
     AuthenticationsModule,
-    PlayModule,
-    HistoryModule,
+    BoardModule,
+    MatchModule,
 
     ClsModule.forRoot({
       global: true,
@@ -22,7 +23,7 @@ import { Match } from './match/entities/match-table.entity';
       type: 'postgres',
       host: 'localhost',
       port: 5433,
-      entities: [User, Match],
+      entities: [User, Match, Board],
       database: 'williamwilson',
       synchronize: true,
       logging: true,

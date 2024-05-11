@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { HistoryController } from './match.controller';
+import { MatchController } from './match.controller';
 import { MatchService } from './match.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Match } from './entities/match-table.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Match])],
-  controllers: [HistoryController],
+  controllers: [MatchController],
   providers: [MatchService],
 })
-export class HistoryModule { }
+export class MatchModule { }

@@ -1,0 +1,24 @@
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { BoardService } from './board.service';
+import { SetupDTO } from './entities/setup-dto.entity';
+import { IsNotEmpty } from 'class-validator';
+
+@Controller("/board")
+export class BoardController {
+  constructor(private readonly boardService: BoardService) {}
+
+  @Post("/setup")
+  async setupBoard(
+    @Query("matchId") matchId: string,
+    @Body() setup: SetupDTO
+  ): Promise<boolean [][]> {
+    return await this.boardService.setupBoard(matchId, setup);
+  }
+
+  @Post("/fire")
+  async getLeaderboard(
+    @Query("limit") limit?: number
+  ): Promise<string> {
+    return ""
+  }
+}

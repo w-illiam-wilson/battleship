@@ -1,0 +1,51 @@
+// battleship-board.entity.ts
+import { Entity, PrimaryColumn, Column, Check, ManyToOne, JoinColumn, BeforeInsert, Repository } from 'typeorm';
+import { Ship } from './ship.enum';
+import { Match } from 'src/match/entities/match-table.entity';
+import { User } from 'src/authentications/entities/user-table.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+
+@Entity()
+@Check(`"row_number" BETWEEN 0 AND 9`)
+@Check(`"column_number" BETWEEN 0 AND 9`)
+export class Board {
+    constructor(
+        @InjectRepository(Match)
+        private matchRepository: Repository<Match>
+    ) { }
+    
+    @PrimaryColumn('uuid')
+    match_id: string;
+
+    @PrimaryColumn()
+    user_id: string;
+
+    @PrimaryColumn('int')
+    row_number: number;
+
+    @PrimaryColumn('int')
+    column_number: number;
+
+    @Column({ type: 'enum', enum: Ship, nullable: true, default: null })
+    piece: Ship;
+
+    @Column({ type: 'boolean', default: false })
+    hit: boolean;
+
+    @ManyToOne(() => Match, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'match_id', referencedColumnName: 'match_id' })
+    matchHistory: Match;
+
+    @ManyToOne(() => User, { onDelete: 'CASCADE' })
+    @JoinColumn({ name: 'user_id', referencedColumnName: 'user_id' })
+    user: User;
+
+    @BeforeInsert()
+    async checkBattleshipBoardPlayersInsert() {
+        // Ensures user can only update board for the board associated with the match
+        const match = await this.matchRepository.findOneBy({match_id: this.match_id});
+        if (!match || (match.player_one !== this.user_id && match.player_two !== this.user_id)) {
+            throw new Error('This user is not associated with this match id');
+        }
+    }
+}

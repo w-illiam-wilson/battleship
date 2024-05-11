@@ -3,7 +3,7 @@ import { MatchService } from './match.service';
 import { LeaderboardDTO, MatchDTO, MatchHistoryDTO } from './entities/match-dto.entity';
 
 @Controller("/match")
-export class HistoryController {
+export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
   @Post("/start")
