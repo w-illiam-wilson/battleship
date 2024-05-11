@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Board } from './entities/board-table.entity';
 import { SetupDTO } from './entities/setup-dto.entity';
-import { Ship, ShipPiece } from './entities/ship.enum';
+import { ShipInfo, ShipPiece } from './entities/ship.entity';
 import { Match } from 'src/match/entities/match-table.entity';
 
 @Injectable()
@@ -18,7 +18,10 @@ export class BoardService {
   ) { }
 
   async setupBoard(matchId, setup: SetupDTO): Promise<ShipPiece[][]> {
-    const userId = this.clsService.get("userId")
+    const userId = this.clsService.get("userId");
+    if (await this.isBoardSetup(matchId, userId)) {
+      throw new HttpException("Your board has already been setup", HttpStatus.CONFLICT)
+    }
     const battleshipBoard = this.fillBoard(setup);
     const boardPieces: Board[] = []
     battleshipBoard.forEach((row, rowNumber) => {
@@ -41,14 +44,23 @@ export class BoardService {
     return battleshipBoard;
   }
 
+  private async isBoardSetup(matchId: string, userId: string): Promise<boolean> {
+    const countPiecesPlaced = await this.boardRepository.createQueryBuilder('board')
+      .where('board.match_id = :matchId', { matchId })
+      .andWhere('board.user_id = :userId', { userId })
+      .andWhere('board.piece IS NOT NULL')
+      .getCount();
+    return countPiecesPlaced === Object.keys(ShipPiece).length
+  }
+
   private fillBoard(setup: SetupDTO) {
     const positionArray: ShipPiece[][] = Array.from({ length: 10 }, () => Array(10).fill(null));
     try {
-      this.placeShip(setup.A.position, setup.A.row, setup.A.column, positionArray, Ship.A);
-      this.placeShip(setup.B.position, setup.B.row, setup.B.column, positionArray, Ship.B);
-      this.placeShip(setup.C.position, setup.C.row, setup.C.column, positionArray, Ship.C);
-      this.placeShip(setup.D.position, setup.D.row, setup.D.column, positionArray, Ship.D);
-      this.placeShip(setup.E.position, setup.E.row, setup.E.column, positionArray, Ship.E);
+      this.placeShip(setup.A.position, setup.A.row, setup.A.column, positionArray, ShipInfo.A);
+      this.placeShip(setup.B.position, setup.B.row, setup.B.column, positionArray, ShipInfo.B);
+      this.placeShip(setup.C.position, setup.C.row, setup.C.column, positionArray, ShipInfo.C);
+      this.placeShip(setup.D.position, setup.D.row, setup.D.column, positionArray, ShipInfo.D);
+      this.placeShip(setup.E.position, setup.E.row, setup.E.column, positionArray, ShipInfo.E);
     } catch (e) {
       throw new HttpException('Ships overlap or go off the board in this setup', HttpStatus.BAD_REQUEST);
     }

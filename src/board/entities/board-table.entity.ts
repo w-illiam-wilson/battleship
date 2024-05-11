@@ -1,6 +1,6 @@
 // battleship-board.entity.ts
 import { Entity, PrimaryColumn, Column, Check, ManyToOne, JoinColumn, BeforeInsert, Repository } from 'typeorm';
-import { ShipPiece } from './ship.enum';
+import { ShipPiece } from './ship.entity';
 import { Match } from 'src/match/entities/match-table.entity';
 import { User } from 'src/authentications/entities/user-table.entity';
 import { InjectRepository } from '@nestjs/typeorm';

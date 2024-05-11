@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { SetupDTO } from './entities/setup-dto.entity';
-import { ShipPiece } from './entities/ship.enum';
+import { ShipPiece } from './entities/ship.entity';
 
-@Controller("/board")
+@Controller("/boards")
 export class BoardController {
   constructor(private readonly boardService: BoardService) {}
 
@@ -11,7 +11,7 @@ export class BoardController {
   async setupBoard(
     @Query("matchId") matchId: string,
     @Body() setup: SetupDTO
-  ): Promise<ShipPiece [][]> {
+  ): Promise<ShipPiece[][]> {
     return await this.boardService.setupBoard(matchId, setup);
   }
 

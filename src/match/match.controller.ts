@@ -2,7 +2,7 @@ import { Controller, Get, Post, Query } from '@nestjs/common';
 import { MatchService } from './match.service';
 import { LeaderboardDTO, MatchDTO, MatchHistoryDTO } from './entities/match-dto.entity';
 
-@Controller("/match")
+@Controller("/matches")
 export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
