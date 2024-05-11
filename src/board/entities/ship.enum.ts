@@ -1,4 +1,4 @@
-export enum Ship {
+export enum ShipPiece {
     A1 = 'A1',
     A2 = 'A2',
     A3 = 'A3',
@@ -17,4 +17,27 @@ export enum Ship {
     D3 = 'D3',
     E1 = 'E1',
     E2 = 'E2',
+  }
+
+  export const Ship = {
+    A: {
+        length: 5,
+        name: "A"
+    },
+    B: {
+        length: 4,
+        name: "B"
+    },
+    C: {
+        length: 4,
+        name: "C"
+    },
+    D: {
+        length: 3,
+        name: "D"
+    },
+    E: {
+        length: 2,
+        name: "E"
+    },
   }

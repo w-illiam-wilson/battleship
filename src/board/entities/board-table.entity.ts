@@ -1,6 +1,6 @@
 // battleship-board.entity.ts
 import { Entity, PrimaryColumn, Column, Check, ManyToOne, JoinColumn, BeforeInsert, Repository } from 'typeorm';
-import { Ship } from './ship.enum';
+import { ShipPiece } from './ship.enum';
 import { Match } from 'src/match/entities/match-table.entity';
 import { User } from 'src/authentications/entities/user-table.entity';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -26,8 +26,8 @@ export class Board {
     @PrimaryColumn('int')
     column_number: number;
 
-    @Column({ type: 'enum', enum: Ship, nullable: true, default: null })
-    piece: Ship;
+    @Column({ type: 'enum', enum: ShipPiece, nullable: true, default: null })
+    piece: ShipPiece;
 
     @Column({ type: 'boolean', default: false })
     hit: boolean;

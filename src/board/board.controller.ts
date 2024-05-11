@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { SetupDTO } from './entities/setup-dto.entity';
 import { IsNotEmpty } from 'class-validator';
+import { ShipPiece } from './entities/ship.enum';
 
 @Controller("/board")
 export class BoardController {
@@ -11,7 +12,7 @@ export class BoardController {
   async setupBoard(
     @Query("matchId") matchId: string,
     @Body() setup: SetupDTO
-  ): Promise<boolean [][]> {
+  ): Promise<ShipPiece [][]> {
     return await this.boardService.setupBoard(matchId, setup);
   }
 
