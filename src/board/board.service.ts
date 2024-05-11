@@ -6,6 +6,9 @@ import { Board } from './entities/board-table.entity';
 import { SetupDTO } from './entities/setup-dto.entity';
 import { ShipInfo, ShipPiece } from './entities/ship.entity';
 import { Match } from 'src/match/entities/match-table.entity';
+import { OpponentBoard, OpponentSquareCurrentState, ViewableBoard, YourBoard, YourSquareCurrentState } from './entities/viewable-board-dto.entity';
+import { MissileDTO } from './entities/fire-dto.entity';
+import { Scores } from './entities/score-dto.entity';
 
 @Injectable()
 export class BoardService {
@@ -17,7 +20,38 @@ export class BoardService {
     private readonly clsService: ClsService
   ) { }
 
-  async setupBoard(matchId, setup: SetupDTO): Promise<ShipPiece[][]> {
+  async fireMissile(matchId, missile: MissileDTO): Promise<OpponentBoard | string> {
+    const scores = await this.getScores(matchId);
+    if (scores.you == 18 || scores.opponent == 18) {
+      throw new HttpException("Game has already finished", HttpStatus.FORBIDDEN)
+    }
+    if (!await this.isYourTurn(matchId)) {
+      throw new HttpException("It's not your turn", HttpStatus.FORBIDDEN)
+    }
+    const userId = this.clsService.get("userId");
+    await this.boardRepository
+      .createQueryBuilder()
+      .update(Board)
+      .set({ hit: true })
+      .where(`board.match_id = '${matchId}' and board.user_id != '${userId}' and board.row_number = ${missile.row} and board.column_number = ${missile.column}`)
+      .execute();
+    if (await this.youWon(matchId)) {
+      return "You won!"
+    }
+    await this.switchTurns(matchId)
+    return await this.getOpponentBoard(matchId)
+
+  }
+
+  async getBoards(matchId): Promise<ViewableBoard> {
+    const viewableBoard: ViewableBoard = {
+      you: await this.getYourBoard(matchId),
+      opponent: await this.getOpponentBoard(matchId)
+    }
+    return viewableBoard;
+  }
+
+  async setupBoard(matchId, setup: SetupDTO): Promise<YourBoard> {
     const userId = this.clsService.get("userId");
     if (await this.isBoardSetup(matchId, userId)) {
       throw new HttpException("Your board has already been setup", HttpStatus.CONFLICT)
@@ -40,8 +74,122 @@ export class BoardService {
     } catch (e) {
       throw new HttpException("Match id isn't correct or isn't assigned to your user", HttpStatus.BAD_REQUEST)
     }
-   
-    return battleshipBoard;
+
+    return await this.getYourBoard(matchId);
+  }
+
+  private async youWon(matchId) {
+    if ((await this.getScores(matchId)).you === 18) {
+      const matchInfo = await this.matchRepository.createQueryBuilder('match')
+      .select('*')
+      .where(`match.match_id = '${matchId}'`)
+      .getRawOne();
+
+      matchInfo.match_winner = this.clsService.get("userId")
+
+      await this.matchRepository.save(matchInfo)
+      return true;
+    }
+    return false;
+  }
+
+  private async getScores(matchId): Promise<Scores> {
+    const userId = this.clsService.get("userId");
+    const results = await this.boardRepository
+      .createQueryBuilder('board')
+      .select('board.user_id', 'user_id')
+      .addSelect('18 - COUNT(*)', 'score')
+      .where(`board.match_id = '${matchId}'`)
+      .andWhere('board.hit = false and board.piece is NOT NULL')
+      .groupBy('board.user_id')
+      .getRawMany();
+    let opponentScore: number = results.find(result => result.user_id === userId)?.score;
+    let yourScore: number = results.find(result => result.user_id !== userId)?.score;
+    if (!yourScore) {
+      yourScore = 18
+    }
+    if (!opponentScore) {
+      yourScore = 18
+    }
+    return {
+      you: yourScore,
+      opponent: opponentScore
+    }
+  }
+
+  private async switchTurns(matchId: string) {
+    const matchInfo = await this.matchRepository.createQueryBuilder('match')
+    .select('*')
+    .where(`match.match_id = '${matchId}'`)
+    .getRawOne();
+
+    matchInfo.player_one_turn = !matchInfo.player_one_turn
+    await this.matchRepository.save(matchInfo)
+  }
+
+  private async isYourTurn(matchId: string): Promise<boolean> {
+    // return true;
+    const userId = this.clsService.get("userId");
+    const playerTurn = await this.matchRepository.createQueryBuilder('match')
+      .select(`CASE WHEN match.player_one_turn = true THEN match.player_one WHEN match.player_one_turn != true THEN match.player_two END`, 'player_turn')
+      .where(`match.match_id = '${matchId}'`)
+      .getRawOne();
+    return playerTurn.player_turn === userId
+  }
+
+  private async getYourBoard(matchId: string): Promise<YourBoard> {
+    const userId = this.clsService.get("userId");
+    const board: YourSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ piece: null, hit: false }));
+
+    const rows = await this.boardRepository.createQueryBuilder('board')
+      .select('board.row_number', 'row_number')
+      .addSelect('board.column_number', 'column_number')
+      .addSelect('board.piece', 'piece')
+      .addSelect('board.hit', 'hit')
+      .where(`board.match_id = '${matchId}' and board.user_id = '${userId}'`)
+      .orderBy("row_number", "ASC")
+      .addOrderBy("column_number", "ASC")
+      .getRawMany();
+    if (rows.length != 100) {
+      throw new HttpException("Your board is not setup yet", HttpStatus.NOT_FOUND);
+    }
+
+    rows.forEach((square, index) => {
+      const yourSquare = new YourSquareCurrentState()
+      yourSquare.piece = square.piece;
+      yourSquare.hit = square.hit;
+      board[square.row_number][square.column_number] = yourSquare;
+    })
+    return {
+      table: board,
+      score: (await this.getScores(matchId)).you
+    };
+  }
+
+  private async getOpponentBoard(matchId: string): Promise<OpponentBoard> {
+    const userId = this.clsService.get("userId");
+    const board: OpponentSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ state: null }));
+
+    const rows = await this.boardRepository.createQueryBuilder('board')
+      .select('board.row_number', 'row_number')
+      .addSelect('board.column_number', 'column_number')
+      .addSelect(`CASE WHEN board.hit = true AND board.piece IS NOT NULL THEN 'HIT' WHEN board.hit = true AND board.piece IS NULL THEN 'MISS' ELSE NULL END`, 'state')
+      .where(`board.match_id = '${matchId}' and board.user_id != '${userId}'`)
+      .getRawMany();
+
+    if (rows.length != 100) {
+      throw new HttpException("Opponent's board not setup yet", HttpStatus.NOT_FOUND);
+    }
+
+    rows.forEach((square, index) => {
+      const yourSquare = new OpponentSquareCurrentState()
+      yourSquare.state = square.state;
+      board[square.row_number][square.column_number] = yourSquare;
+    })
+    return {
+      table: board,
+      score: (await this.getScores(matchId)).opponent
+    };
   }
 
   private async isBoardSetup(matchId: string, userId: string): Promise<boolean> {
@@ -69,7 +217,7 @@ export class BoardService {
 
   private placeShip(position: "DOWN" | "RIGHT", row: number, column: number, boatArray: ShipPiece[][], ship: any) {
     const shipLength = ship.length;
-    const shipName = ship.name; 
+    const shipName = ship.name;
 
     const maxRowPosition = boatArray.length - 1; //9 for a 10x10 board
     const maxColumnPosition = boatArray[0].length - 1; //9 for a 10x10 board
