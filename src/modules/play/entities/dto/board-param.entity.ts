@@ -1,6 +1,6 @@
 import { IsString } from "class-validator";
 
-export class BoardQuery {
+export class BoardParam {
     @IsString()
     matchId: string
 }
