@@ -28,6 +28,7 @@ export class GetBoardService {
             .orderBy("row_number", "ASC")
             .addOrderBy("column_number", "ASC")
             .getRawMany();
+            
         if (rows.length != 100) {
             throw new HttpException("Your board is not setup yet", HttpStatus.NOT_FOUND);
         }

@@ -29,7 +29,11 @@ export class ScoreService {
             yourScore = 18
         }
         if (!opponentScore) {
-            yourScore = 18
+            opponentScore = 18
+        }
+        if (results.length != 2) {
+            yourScore = 0
+            opponentScore = 0
         }
         const score = new Score();
         score.you = Number(yourScore);

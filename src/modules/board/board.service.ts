@@ -30,7 +30,7 @@ export class BoardService {
     try {
       await this.getGameState(new GameStateRequest({matchId: matchId, layout: true, opponent: true}))
     } catch {
-      throw new HttpException("Boards haven't been set up yet", HttpStatus.FORBIDDEN)
+      throw new HttpException("Game hasn't started yet", HttpStatus.FORBIDDEN)
     }
     if (scores.you == 18 || scores.opponent == 18) {
       throw new HttpException("Game has already finished", HttpStatus.FORBIDDEN)
