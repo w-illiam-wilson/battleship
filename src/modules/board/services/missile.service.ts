@@ -5,6 +5,7 @@ import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
 import { MissileDTO } from '../entities/dto/missile-dto.entity';
 import { Match } from 'src/modules/match/entities/database/match.entity';
+import { HitOrMiss, OpponentSquareCurrentStateDTO } from '../entities/dto/game-state-dto.entity';
 
 @Injectable()
 export class MissileService {
@@ -16,7 +17,7 @@ export class MissileService {
         private readonly clsService: ClsService
     ) { }
 
-    async fireMissile(matchId, missile: MissileDTO) {
+    async fireMissile(matchId, missile: MissileDTO): Promise<OpponentSquareCurrentStateDTO> {
         const userId = this.clsService.get("userId");
         const boardPieces = await this.boardRepository.findBy({ match_id: matchId, row_number: missile.row, column_number: missile.column });
         const oldBoardPiece = boardPieces.find(result => result.user_id !== userId);
@@ -30,5 +31,11 @@ export class MissileService {
         newBoardPiece.hit = true;
 
         await this.boardRepository.save(newBoardPiece);
+
+        const opponentState: OpponentSquareCurrentStateDTO = {state: HitOrMiss.MISS};
+        if (newBoardPiece.piece) {
+            opponentState.state = HitOrMiss.HIT;
+        }
+        return opponentState;
     }
 }

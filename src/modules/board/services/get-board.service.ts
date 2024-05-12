@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
-import { HitOrMiss, LayoutDTO, OpponentSquareCurrentState, YourSquareCurrentState } from '../entities/dto/game-state-dto.entity';
+import { HitOrMiss, LayoutDTO, OpponentSquareCurrentStateDTO, YourSquareCurrentStateDTO } from '../entities/dto/game-state-dto.entity';
 
 @Injectable()
 export class GetBoardService {
@@ -15,7 +15,7 @@ export class GetBoardService {
 
     async getYourBoard(matchId: string): Promise<LayoutDTO> {
         const userId = this.clsService.get("userId");
-        const board: YourSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ piece: null, hit: false }));
+        const board: YourSquareCurrentStateDTO[][] = Array.from({ length: 10 }, () => Array(10).fill({ piece: null, hit: false }));
         const layout: LayoutDTO = new LayoutDTO()
         layout.you = board;
 
@@ -28,13 +28,13 @@ export class GetBoardService {
             .orderBy("row_number", "ASC")
             .addOrderBy("column_number", "ASC")
             .getRawMany();
-            
+
         if (rows.length != 100) {
             throw new HttpException("Your board is not setup yet", HttpStatus.NOT_FOUND);
         }
 
         rows.forEach((square, index) => {
-            const yourSquare = new YourSquareCurrentState()
+            const yourSquare = new YourSquareCurrentStateDTO()
             yourSquare.piece = square.piece;
             yourSquare.hit = square.hit;
             board[square.row_number][square.column_number] = yourSquare;
@@ -44,7 +44,7 @@ export class GetBoardService {
 
     async getOpponentBoard(matchId: string): Promise<LayoutDTO> {
         const userId = this.clsService.get("userId");
-        const board: OpponentSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ state: null }));
+        const board: OpponentSquareCurrentStateDTO[][] = Array.from({ length: 10 }, () => Array(10).fill({ state: null }));
         const layout: LayoutDTO = new LayoutDTO()
         layout.opponent = board;
 
@@ -60,7 +60,7 @@ export class GetBoardService {
         }
 
         squares.forEach((square) => {
-            const yourSquare = new OpponentSquareCurrentState()
+            const yourSquare = new OpponentSquareCurrentStateDTO()
             yourSquare.state = HitOrMiss[square.state] ?? null;
             board[square.row_number][square.column_number] = yourSquare;
         })

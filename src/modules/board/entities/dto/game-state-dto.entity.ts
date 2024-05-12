@@ -6,18 +6,18 @@ export enum HitOrMiss {
     MISS = 'MISS',
 }
 
-export class OpponentSquareCurrentState {
+export class OpponentSquareCurrentStateDTO {
     state: HitOrMiss | null
 }
 
-export class YourSquareCurrentState {
+export class YourSquareCurrentStateDTO {
     piece: ShipPiece;
     hit: boolean;
 }
 
 export class LayoutDTO {
-    you: YourSquareCurrentState[][]
-    opponent: OpponentSquareCurrentState[][]
+    you: YourSquareCurrentStateDTO[][]
+    opponent: OpponentSquareCurrentStateDTO[][]
 }
 
 

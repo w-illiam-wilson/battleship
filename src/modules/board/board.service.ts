@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
-import { GameStateDTO, LayoutDTO } from './entities/dto/game-state-dto.entity';
+import { GameStateDTO, LayoutDTO, OpponentSquareCurrentStateDTO } from './entities/dto/game-state-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
 import { SetupBoardService } from './services/setup-board.service';
 import { GetBoardService } from './services/get-board.service';
@@ -25,7 +25,7 @@ export class BoardService {
     return this.getGameState(new GameStateRequest({matchId: matchId, layout: true, you: true}))
   }
 
-  async fireMissile(matchId, missile: MissileDTO): Promise<GameStateDTO> {
+  async fireMissile(matchId, missile: MissileDTO): Promise<OpponentSquareCurrentStateDTO> {
     const scores = await this.scoreService.getScores(matchId);
     try {
       await this.getGameState(new GameStateRequest({matchId: matchId, layout: true, opponent: true}))
@@ -38,8 +38,8 @@ export class BoardService {
     if (!await this.turnService.isYourTurn(matchId)) {
       throw new HttpException("It's not your turn", HttpStatus.FORBIDDEN)
     }
-    await this.missileService.fireMissile(matchId, missile)
-    return await this.getGameState(new GameStateRequest({matchId: matchId, layout: true, opponent: true}))
+    const opponentState = await this.missileService.fireMissile(matchId, missile);
+    return opponentState;
   }
 
   async getGameState(gameStateRequest: GameStateRequest): Promise<GameStateDTO> {

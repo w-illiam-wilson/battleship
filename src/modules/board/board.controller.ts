@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
-import { GameStateDTO } from './entities/dto/game-state-dto.entity';
+import { GameStateDTO, OpponentSquareCurrentStateDTO } from './entities/dto/game-state-dto.entity';
 import { MatchParam } from 'src/entities/match-param.entity';
 import { GameStateRequest } from './entities/util/game-state-request.entity';
 
@@ -46,7 +46,7 @@ export class BoardsController {
   async fireMissile(
     @Param() matchParam: MatchParam,
     @Body() missile: MissileDTO
-  ): Promise<GameStateDTO> {
+  ): Promise<OpponentSquareCurrentStateDTO> {
     return await this.gameService.fireMissile(matchParam.matchId, missile);
   }
 
