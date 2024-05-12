@@ -2,7 +2,7 @@ import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MatchModule } from './match/match.module';
-import { AuthenticationsModule } from './authentications/authentications.module';
+import { UsersModule } from './authentications/users.module';
 import { SessionMiddleware } from './authentications/middleware/session.middleware';
 import { User } from './authentications/entities/user-table.entity';
 import { Match } from './match/entities/match-table.entity';
@@ -11,7 +11,7 @@ import { Board } from './board/entities/board-table.entity';
 
 @Module({
   imports: [
-    AuthenticationsModule,
+    UsersModule,
     BoardModule,
     MatchModule,
 
@@ -34,7 +34,7 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ClsMiddleware, SessionMiddleware)
-      .exclude("authentications/(.*)")
+      .exclude("users/(.*)")
       .forRoutes('*');
   }
 }

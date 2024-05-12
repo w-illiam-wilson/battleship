@@ -13,6 +13,7 @@ export class SessionMiddleware implements NestMiddleware {
     }
     
     this.clsService.set("userId", await decrypt(req.cookies["SESSION_TOKEN"]));
+    
     next();
   }
 }
