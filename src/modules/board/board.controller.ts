@@ -4,6 +4,7 @@ import { SetupDTO } from './entities/setup-dto.entity';
 import { ShipPiece } from './entities/ship.entity';
 import { MissileDTO } from './entities/fire-dto.entity';
 import { OpponentBoard, OpponentSquareCurrentState, ViewableBoard, YourBoard } from './entities/viewable-board-dto.entity';
+import { BoardQuery } from './entities/dto/board-query.entity';
 
 @Controller("/boards")
 export class BoardController {
@@ -11,9 +12,9 @@ export class BoardController {
 
   @Get()
   async getBoards(
-    @Query("matchId") matchId: string,
+    @Query() boardQuery: BoardQuery
   ): Promise<ViewableBoard> {
-    return await this.boardService.getBoards(matchId);
+    return await this.boardService.getBoards(boardQuery.matchId);
   }
 
   @Post()

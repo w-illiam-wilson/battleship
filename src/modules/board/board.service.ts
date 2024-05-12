@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
-import { Board } from './entities/board-table.entity';
+import { Board } from './entities/database/board-table.entity';
 import { SetupDTO } from './entities/setup-dto.entity';
 import { ShipInfo, ShipPiece } from './entities/ship.entity';
 import { Match } from 'src/modules/match/entities/database/match-table.entity';
