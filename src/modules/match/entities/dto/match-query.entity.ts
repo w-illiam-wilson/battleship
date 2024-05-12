@@ -18,5 +18,5 @@ export class MatchQuery extends LimitQuery {
             return undefined;
         }
       })
-    current?: boolean
+    finished?: boolean
 }

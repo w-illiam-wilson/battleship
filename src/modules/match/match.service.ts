@@ -36,7 +36,8 @@ export class MatchService {
     }
   }
 
-  async getMatches(userId: string, current: boolean, limit: number, matchId?: string): Promise<MatchDTO[]> {
+  async getMatches(userId: string, finished: boolean, limit: number, matchId?: string): Promise<MatchDTO[]> {
+    console.log(finished)
     const query = this.matchRepository.createQueryBuilder('match')
       .select('match.match_id', 'match_id')
       .addSelect('match.match_time', 'match_time')
@@ -47,9 +48,9 @@ export class MatchService {
     if (userId) {
       query.andWhere(`(match.player_one = '${userId}' OR match.player_two = '${userId}')`)
     }
-    if (current === true) {
+    if (finished === false) {
       query.andWhere('match.match_winner IS NULL')
-    } else if (current === false) {
+    } else if (finished === true) {
       query.andWhere('match.match_winner IS NOT NULL')
     }
     if (matchId) {

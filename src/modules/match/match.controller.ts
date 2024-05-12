@@ -22,7 +22,7 @@ export class MatchController {
     @Query() matchQuery: MatchQuery,
   ): Promise<MatchDTO[]> {
     console.log(matchQuery)
-    return await this.matchService.getMatches(matchQuery.userId, matchQuery.current, matchQuery.limit);
+    return await this.matchService.getMatches(matchQuery.userId, matchQuery.finished, matchQuery.limit);
   }
 
   @Get(':matchId')
