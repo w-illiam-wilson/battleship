@@ -6,8 +6,8 @@ import { UserModule } from './modules/user/user.module';
 import { SessionMiddleware } from './middleware/session.middleware';
 import { User } from './modules/user/entities/database/user-table.entity';
 import { Match } from './modules/match/entities/database/match-table.entity';
-import { BoardModule } from './modules/play/board.module';
-import { Board } from './modules/play/entities/database/board-table.entity';
+import { BoardModule } from './modules/board/board.module';
+import { Board } from './modules/board/entities/database/board-table.entity';
 
 @Module({
   imports: [

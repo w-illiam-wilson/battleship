@@ -37,7 +37,6 @@ export class MatchService {
   }
 
   async getMatches(userId: string, finished: boolean, limit: number, matchId?: string): Promise<MatchDTO[]> {
-    console.log(finished)
     const query = this.matchRepository.createQueryBuilder('match')
       .select('match.match_id', 'match_id')
       .addSelect('match.match_time', 'match_time')

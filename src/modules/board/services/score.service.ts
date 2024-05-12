@@ -31,9 +31,9 @@ export class ScoreService {
         if (!opponentScore) {
             yourScore = 18
         }
-        return {
-            you: yourScore,
-            opponent: opponentScore
-        }
+        const score = new Score();
+        score.you = Number(yourScore);
+        score.opponent = Number(opponentScore);
+        return score;
     }
 }

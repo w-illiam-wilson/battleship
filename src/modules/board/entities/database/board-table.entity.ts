@@ -1,5 +1,5 @@
 // battleship-board.entity.ts
-import { Entity, PrimaryColumn, Column, Check, ManyToOne, JoinColumn, BeforeInsert, Repository, AfterUpdate } from 'typeorm';
+import { Entity, PrimaryColumn, Column, Check, ManyToOne, JoinColumn, BeforeInsert, Repository, AfterUpdate, BeforeUpdate } from 'typeorm';
 import { ShipPiece } from '../dto/ship.entity';
 import { Match } from 'src/modules/match/entities/database/match-table.entity';
 import { User } from 'src/modules/user/entities/database/user-table.entity';
@@ -10,10 +10,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Check(`"column_number" BETWEEN 0 AND 9`)
 export class Board {
     constructor(
+        @InjectRepository(Board)
+        private boardRepository: Repository<Board>,
         @InjectRepository(Match)
         private matchRepository: Repository<Match>,
-        // @InjectRepository(Board)
-        // private boardRepository: Repository<Board>,
     ) { }
 
     @PrimaryColumn('uuid')
@@ -52,38 +52,38 @@ export class Board {
     }
 
     @AfterUpdate()
-    async afterUpdate() {
-        console.log("after update")
+    async switchTurns() {
         const match = await this.matchRepository.findOneBy({ match_id: this.match_id });
         match.player_one_turn = !match.player_one_turn;
         await this.matchRepository.save(match);
     }
 
+    @AfterUpdate()
+    async checkWinnerAfterUpdate() {
+        const results = await this.boardRepository
+            .createQueryBuilder('board')
+            .select('board.user_id', 'user_id')
+            .addSelect('18 - COUNT(*)', 'score')
+            .where(`board.match_id = '${this.match_id}'`)
+            .andWhere('board.hit = false and board.piece is NOT NULL')
+            .groupBy('board.user_id')
+            .getRawMany();
+        const yourScore: number = results.find(result => result.user_id === this.user_id)?.score;
 
-    // async checkWinnerAfterUpdate() {
-    //     const results = await this.boardRepository
-    //         .createQueryBuilder('board')
-    //         .select('board.user_id', 'user_id')
-    //         .addSelect('18 - COUNT(*)', 'score')
-    //         .where(`board.match_id = '${this.match_id}'`)
-    //         .andWhere('board.hit = false and board.piece is NOT NULL')
-    //         .groupBy('board.user_id')
-    //         .getRawMany();
-    //     let opponentScore: number = results.find(result => result.user_id === this.user_id)?.score;
-    //     let yourScore: number = results.find(result => result.user_id !== this.user_id)?.score;
-    //     if (!yourScore) {
-    //         yourScore = 18
-    //     }
-    //     if (!opponentScore) {
-    //         yourScore = 18
-    //     }
-    //     console.log({
-    //         you: yourScore,
-    //         opponent: opponentScore
-    //     })
-    //     return {
-    //         you: yourScore,
-    //         opponent: opponentScore
-    //     }
-    // }
+        if (Number(yourScore) == 17) {
+            const boardPiece = await this.boardRepository.findOneBy({ match_id: this.match_id, user_id: this.user_id, row_number: this.row_number, column_number: this.column_number });
+            if (boardPiece.piece) {
+                //user just hit final piece
+                const match = await this.matchRepository.findOneBy({ match_id: this.match_id });
+                
+                if (match.player_one == this.user_id) {
+                    match.match_winner = match.player_two;
+                } else {
+                    match.match_winner = match.player_one
+                }
+
+                await this.matchRepository.save(match);
+            }
+        }
+    }
 }

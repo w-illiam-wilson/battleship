@@ -26,7 +26,7 @@ export class SetupBoardService {
         const boardPieces: Board[] = []
         battleshipBoard.forEach((row, rowNumber) => {
             row.forEach((_, columnNumber) => {
-                const newBoardPiece = new Board(this.matchRepository);
+                const newBoardPiece = new Board(this.boardRepository, this.matchRepository);
                 newBoardPiece.match_id = matchId;
                 newBoardPiece.user_id = userId;
                 newBoardPiece.row_number = rowNumber;
@@ -38,7 +38,7 @@ export class SetupBoardService {
         try {
             await this.boardRepository.save(boardPieces)
         } catch (e) {
-            throw new HttpException("Match id isn't correct or isn't assigned to your user", HttpStatus.BAD_REQUEST)
+            throw new HttpException("Match id isn't correct or isn't assigned to your user", HttpStatus.BAD_REQUEST);
         }
     }
 

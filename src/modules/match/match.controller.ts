@@ -21,7 +21,6 @@ export class MatchController {
   async getMatches(
     @Query() matchQuery: MatchQuery,
   ): Promise<MatchDTO[]> {
-    console.log(matchQuery)
     return await this.matchService.getMatches(matchQuery.userId, matchQuery.finished, matchQuery.limit);
   }
 

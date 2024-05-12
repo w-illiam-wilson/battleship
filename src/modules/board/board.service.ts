@@ -1,11 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { ClsService } from 'nestjs-cls';
-import { Board } from './entities/database/board-table.entity';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
-import { Match } from 'src/modules/match/entities/database/match-table.entity';
-import { OpponentSquareCurrentState, GameState, YourSquareCurrentState, Layout, Score, GameStateRequest } from './entities/dto/game-state-dto';
+import { GameState, Layout, Score, GameStateRequest } from './entities/dto/game-state-dto';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
 import { SetupBoardService } from './services/setup-board.service';
 import { GetBoardService } from './services/get-board.service';
@@ -14,7 +9,7 @@ import { TurnService } from './services/turn-service';
 import { MissileService } from './services/missile.service';
 
 @Injectable()
-export class GameService {
+export class BoardService {
   constructor(
     private readonly setupBoardService: SetupBoardService,
     private readonly getBoardService: GetBoardService,
@@ -60,7 +55,6 @@ export class GameService {
     if (score) {
       gameState.score = new Score();
       const scores = await this.scoreService.getScores(matchId);
-      console.log(scores)
       if (you) {
         gameState.score.you = scores.you
       }

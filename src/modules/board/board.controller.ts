@@ -1,5 +1,5 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { GameService } from './game.service';
+import { BoardService } from './board.service';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
 import { GameState, GameStateRequest } from './entities/dto/game-state-dto';
@@ -7,7 +7,7 @@ import { MatchParam } from 'src/entities/match-param.entity';
 
 @Controller("/boards")
 export class BoardsController {
-  constructor(private readonly gameService: GameService) {}
+  constructor(private readonly gameService: BoardService) {}
 
   @Get(":matchId/layout/you")
   async getBoardsLayoutYou(
@@ -46,7 +46,6 @@ export class BoardsController {
     @Param() matchParam: MatchParam,
     @Body() missile: MissileDTO
   ): Promise<GameState> {
-    console.log("firing missile")
     return await this.gameService.fireMissile(matchParam.matchId, missile);
   }
 
