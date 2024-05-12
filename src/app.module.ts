@@ -1,17 +1,17 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MatchModule } from './match/match.module';
-import { UsersModule } from './authentications/users.module';
-import { SessionMiddleware } from './authentications/middleware/session.middleware';
-import { User } from './authentications/entities/user-table.entity';
-import { Match } from './match/entities/match-table.entity';
-import { BoardModule } from './board/board.module';
-import { Board } from './board/entities/board-table.entity';
+import { MatchModule } from './modules/match/match.module';
+import { UserModule } from './modules/user/user.module';
+import { SessionMiddleware } from './middleware/session.middleware';
+import { User } from './modules/user/entities/database/user-table.entity';
+import { Match } from './modules/match/entities/database/match-table.entity';
+import { BoardModule } from './modules/board/board.module';
+import { Board } from './modules/board/entities/board-table.entity';
 
 @Module({
   imports: [
-    UsersModule,
+    UserModule,
     BoardModule,
     MatchModule,
 

@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Match } from './entities/match-table.entity';
+import { Match } from './entities/database/match-table.entity';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
-import { CreateMatchDTO, MatchDTO } from './entities/match-dto.entity';
-import { LeaderboardDTO } from './entities/leaderboard-dto.entity';
+import { CreateMatchDTO, MatchDTO } from './entities/dto/match-dto.entity';
+import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
 
 @Injectable()
 export class MatchService {

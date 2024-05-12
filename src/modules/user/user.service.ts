@@ -1,13 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { UserDTO } from './entities/user-dto';
+import { UserDTO } from './entities/dto/user-dto';
 import { Response } from 'express';
-import { decrypt, encrypt } from 'src/util/encryption.util';
+import { decrypt, encrypt } from 'src/modules/user/util/encryption.util';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/user-table.entity';
+import { User } from './entities/database/user-table.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
-export class UsersService {
+export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -42,8 +42,6 @@ export class UsersService {
     userDTO: UserDTO,
     response: Response
   ): Promise<UserDTO> {
-    //attaches SESSION_TOKEN cookie open token object with user_id
-    //also returns current open matches
     const user = await this.userRepository.findOneBy({ user_id: userDTO.user_id });
 
     if (!user || await decrypt(user.password) !== userDTO.password) {

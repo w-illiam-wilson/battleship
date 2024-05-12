@@ -1,24 +1,25 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { UserDTO } from './entities/user-dto';
-import { UsersService } from './users.service';
+import { UserDTO } from './entities/dto/user-dto';
+import { UserService } from './user.service';
+import { LimitQuery } from 'src/entities/limit-query.entity';
 
 @Controller("/users")
-export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+export class UserController {
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async getUser(
-    @Query("limit") limit?: number,
+    @Query() limitQuery: LimitQuery
   ): Promise<UserDTO[]> {
-    return await this.usersService.getUsers(limit);
+    return await this.userService.getUsers(limitQuery.limit);
   }
 
   @Post()
   async createUser(
     @Body() userDTO: UserDTO,
   ): Promise<UserDTO> {
-    return await this.usersService.createUser(userDTO);
+    return await this.userService.createUser(userDTO);
   }
 
   @Post("/login")
@@ -26,7 +27,7 @@ export class UsersController {
     @Body() userDTO: UserDTO,
     @Res({ passthrough: true }) response: Response
   ): Promise<UserDTO> {
-    return await this.usersService.login(userDTO, response);
+    return await this.userService.login(userDTO, response);
   }
   
   @Post("/logout")
@@ -34,6 +35,6 @@ export class UsersController {
     @Res({ passthrough: true }) response: Response
   ) {
     //clears SESSION_TOKEN and invalidates session id on ticket server
-    await this.usersService.logout(response);
+    await this.userService.logout(response);
   }
 }

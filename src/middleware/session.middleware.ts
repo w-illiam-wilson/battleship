@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { ClsService } from 'nestjs-cls';
-import { decrypt } from 'src/util/encryption.util';
+import { decrypt } from 'src/modules/user/util/encryption.util';
 
 @Injectable()
 export class SessionMiddleware implements NestMiddleware {

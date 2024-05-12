@@ -1,8 +1,9 @@
 import { Body, Controller, Get, ParseBoolPipe, Post, Query } from '@nestjs/common';
 import { MatchService } from './match.service';
-import { CreateMatchDTO, MatchDTO } from './entities/match-dto.entity';
-import { LeaderboardDTO } from './entities/leaderboard-dto.entity';
-import { MatchQuery } from './entities/match-query.entity';
+import { CreateMatchDTO, MatchDTO } from './entities/dto/match-dto.entity';
+import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
+import { LimitQuery } from 'src/entities/limit-query.entity';
+import { MatchQuery } from './entities/dto/match-query.entity';
 
 @Controller("/matches")
 export class MatchController {
@@ -10,12 +11,10 @@ export class MatchController {
 
   @Get()
   async getMatches(
-    // @Query() matchQuery: MatchQuery
-    @Query("userId") userId?: string,
-    @Query("current", new ParseBoolPipe({optional: true})) current?: boolean,
-    @Query("limit") limit?: number
+    @Query() matchQuery: MatchQuery,
   ): Promise<MatchDTO[]> {
-    return await this.matchService.getMatches(userId, current, limit);
+    console.log(matchQuery)
+    return await this.matchService.getMatches(matchQuery.userId, matchQuery.current, matchQuery.limit);
   }
 
   @Post()
@@ -27,9 +26,9 @@ export class MatchController {
 
   @Get("/leaderboard")
   async getLeaderboard(
-    @Query("limit") limit?: number
+    @Query() limitQuery: LimitQuery
   ): Promise<LeaderboardDTO[]> {
-    return await this.matchService.getLeaderboard(limit);
+    return await this.matchService.getLeaderboard(limitQuery.limit);
   }
   
 }

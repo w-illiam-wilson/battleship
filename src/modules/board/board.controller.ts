@@ -16,7 +16,7 @@ export class BoardController {
     return await this.boardService.getBoards(matchId);
   }
 
-  @Post("/setup")
+  @Post()
   async setupBoard(
     @Query("matchId") matchId: string,
     @Body() setup: SetupDTO

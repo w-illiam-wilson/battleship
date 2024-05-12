@@ -5,7 +5,7 @@ import { ClsService } from 'nestjs-cls';
 import { Board } from './entities/board-table.entity';
 import { SetupDTO } from './entities/setup-dto.entity';
 import { ShipInfo, ShipPiece } from './entities/ship.entity';
-import { Match } from 'src/match/entities/match-table.entity';
+import { Match } from 'src/modules/match/entities/database/match-table.entity';
 import { OpponentBoard, OpponentSquareCurrentState, ViewableBoard, YourBoard, YourSquareCurrentState } from './entities/viewable-board-dto.entity';
 import { MissileDTO } from './entities/fire-dto.entity';
 import { Scores } from './entities/score-dto.entity';
