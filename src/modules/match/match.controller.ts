@@ -10,6 +10,13 @@ import { MatchParam } from '../../entities/match-param.entity';
 export class MatchController {
   constructor(private readonly matchService: MatchService) {}
 
+  @Get("/leaderboard") //would change this - doesnt match api spec really
+  async getLeaderboard(
+    @Query() limitQuery: LimitQuery
+  ): Promise<LeaderboardDTO[]> {
+    return await this.matchService.getLeaderboard(limitQuery.limit);
+  }
+
   @Get()
   async getMatches(
     @Query() matchQuery: MatchQuery,
@@ -30,13 +37,6 @@ export class MatchController {
     @Body() createMatchDTO: CreateMatchDTO
   ): Promise<MatchDTO> {
     return await this.matchService.createMatch(createMatchDTO);
-  }
-
-  @Get("/leaderboard")
-  async getLeaderboard(
-    @Query() limitQuery: LimitQuery
-  ): Promise<LeaderboardDTO[]> {
-    return await this.matchService.getLeaderboard(limitQuery.limit);
   }
   
 }
