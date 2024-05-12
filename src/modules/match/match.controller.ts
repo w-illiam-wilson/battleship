@@ -4,7 +4,7 @@ import { CreateMatchDTO, MatchDTO } from './entities/dto/match-dto.entity';
 import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
 import { LimitQuery } from 'src/entities/limit-query.entity';
 import { MatchQuery } from './entities/dto/match-query.entity';
-import { MatchParam } from './entities/dto/match-param.entity';
+import { MatchParam } from '../../entities/match-param.entity';
 
 @Controller("/matches")
 export class MatchController {

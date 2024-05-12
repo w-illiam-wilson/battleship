@@ -3,7 +3,7 @@ import { GameService } from './game.service';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
 import { GameState, GameStateRequest } from './entities/dto/game-state-dto';
-import { BoardParam } from './entities/dto/board-param.entity';
+import { MatchParam } from 'src/entities/match-param.entity';
 
 @Controller("/boards")
 export class BoardsController {
@@ -11,10 +11,10 @@ export class BoardsController {
 
   @Get(":matchId/layout/you")
   async getBoardsLayoutYou(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       layout: true,
       you: true
     });
@@ -23,18 +23,18 @@ export class BoardsController {
 
   @Post(":matchId/layout/you")
   async setupBoard(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
     @Body() setup: SetupDTO
   ): Promise<GameState> {
-    return await this.gameService.setupBoard(boardParam.matchId, setup);
+    return await this.gameService.setupBoard(matchParam.matchId, setup);
   }
 
   @Get(":matchId/layout/opponent")
   async getBoardsLayoutOpponent(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       layout: true,
       opponent: true
     });
@@ -43,19 +43,19 @@ export class BoardsController {
 
   @Post(":matchId/layout/opponent")
   async fireMissile(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
     @Body() missile: MissileDTO
   ): Promise<GameState> {
     console.log("firing missile")
-    return await this.gameService.fireMissile(boardParam.matchId, missile);
+    return await this.gameService.fireMissile(matchParam.matchId, missile);
   }
 
   @Get(":matchId/layout")
   async getBoardsLayout(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       layout: true,
       you: true,
       opponent: true
@@ -65,10 +65,10 @@ export class BoardsController {
 
   @Get(":matchId/score/you")
   async getBoardsScoreYou(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       score: true,
       you: true,
     });
@@ -77,10 +77,10 @@ export class BoardsController {
 
   @Get(":matchId/score/opponent")
   async getBoardsScoreOpponent(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       score: true,
       opponent: true,
     });
@@ -89,10 +89,10 @@ export class BoardsController {
 
   @Get(":matchId/score")
   async getBoardsScore(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       score: true,
       you: true,
       opponent: true
@@ -102,10 +102,10 @@ export class BoardsController {
 
   @Get(":matchId")
   async getBoards(
-    @Param() boardParam: BoardParam,
+    @Param() matchParam: MatchParam,
   ): Promise<GameState> {
     const gameStateRequest = new GameStateRequest({
-      matchId: boardParam.matchId,
+      matchId: matchParam.matchId,
       layout: true,
       score: true,
       you: true,

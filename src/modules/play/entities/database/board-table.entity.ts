@@ -53,18 +53,12 @@ export class Board {
 
     @AfterUpdate()
     async afterUpdate() {
+        console.log("after update")
         const match = await this.matchRepository.findOneBy({ match_id: this.match_id });
         match.player_one_turn = !match.player_one_turn;
         await this.matchRepository.save(match);
-        // await this.checkWinnerAfterUpdate()
     }
 
-    // @AfterUpdate()
-    // async switchPlayerTurnAfterUpdate() {
-    //     const match = await this.matchRepository.findOneBy({ match_id: this.match_id });
-    //     match.player_one_turn = !match.player_one_turn;
-    //     await this.matchRepository.save(match);
-    // }
 
     // async checkWinnerAfterUpdate() {
     //     const results = await this.boardRepository
