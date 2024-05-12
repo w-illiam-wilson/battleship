@@ -4,7 +4,6 @@ import { Match } from './entities/database/match-table.entity';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { CreateMatchDTO, MatchDTO } from './entities/dto/match-dto.entity';
-import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
 
 @Injectable()
 export class MatchService {
@@ -58,20 +57,6 @@ export class MatchService {
     query.orderBy('match.match_time', 'DESC')
     if (limit) {
       query.limit(limit)
-    }
-
-    return await query.getRawMany()
-  }
-
-  async getLeaderboard(limit?: number): Promise<LeaderboardDTO[]> {
-    let query = this.matchRepository.createQueryBuilder('match')
-      .select('match.match_winner', 'player')
-      .addSelect('COUNT(*)', 'wins')
-      .where('match.match_winner IS NOT NULL')
-      .groupBy('match.match_winner')
-      .orderBy('wins', 'DESC')
-    if (limit) {
-      query = query.limit(limit);
     }
 
     return await query.getRawMany()

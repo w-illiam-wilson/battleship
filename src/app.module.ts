@@ -8,12 +8,14 @@ import { User } from './modules/user/entities/database/user-table.entity';
 import { Match } from './modules/match/entities/database/match-table.entity';
 import { BoardModule } from './modules/board/board.module';
 import { Board } from './modules/board/entities/database/board-table.entity';
+import { LeaderboardModule } from './modules/leaderboard/leaderboard.module';
 
 @Module({
   imports: [
     UserModule,
     BoardModule,
     MatchModule,
+    LeaderboardModule,
 
     ClsModule.forRoot({
       global: true,
