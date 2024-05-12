@@ -27,7 +27,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users",
+							"raw": "localhost:3000/users?limit=2",
 							"host": [
 								"localhost"
 							],
@@ -38,8 +38,7 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "",
-									"disabled": true
+									"value": "2"
 								}
 							]
 						}
@@ -53,7 +52,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"{{player_three_usernfame}}4trfffdf\",\n    \"password\": \"{{password}}\"\n}",
+							"raw": "{\n    \"user_id\": \"{{player_one_username}}\",\n    \"password\": \"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -80,7 +79,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    // \"user_id\": \"wwilson19\",\n    \"user_id\": \"mwilson21\",\n    \"password\": \"{{password}}\"\n}",
+							"raw": "{\n    \"user_id\": \"{{player_one_username}}\",\n    \"password\": \"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -144,6 +143,11 @@
 									"key": "limit",
 									"value": "1",
 									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "wwilson19",
+									"disabled": true
 								}
 							]
 						}
@@ -161,7 +165,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/matches",
+							"raw": "localhost:3000/matches?finished=false&limit=1&userId=mwilson21",
 							"host": [
 								"localhost"
 							],
@@ -172,18 +176,15 @@
 							"query": [
 								{
 									"key": "finished",
-									"value": "false",
-									"disabled": true
+									"value": "false"
 								},
 								{
 									"key": "limit",
-									"value": "2",
-									"disabled": true
+									"value": "1"
 								},
 								{
 									"key": "userId",
-									"value": "mwilson21",
-									"disabled": true
+									"value": "mwilson21"
 								}
 							]
 						}
@@ -250,7 +251,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"player_two\": \"mwilson21\"\n}",
+							"raw": "{\n    \"player_two\": \"wwilson19\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
