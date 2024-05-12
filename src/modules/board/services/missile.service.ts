@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
 import { MissileDTO } from '../entities/dto/missile-dto.entity';
-import { Match } from 'src/modules/match/entities/database/match-table.entity';
+import { Match } from 'src/modules/match/entities/database/match.entity';
 
 @Injectable()
 export class MissileService {

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
-import { Score } from '../entities/dto/game-state-dto';
+import { Score } from '../entities/dto/score-dto.entity';
 
 @Injectable()
 export class ScoreService {

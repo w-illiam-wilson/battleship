@@ -1,12 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
-import { GameState, Layout, Score, GameStateRequest } from './entities/dto/game-state-dto';
+import { GameStateDTO, LayoutDTO } from './entities/dto/game-state-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
 import { SetupBoardService } from './services/setup-board.service';
 import { GetBoardService } from './services/get-board.service';
 import { ScoreService } from './services/score.service';
 import { TurnService } from './services/turn-service';
 import { MissileService } from './services/missile.service';
+import { Score } from './entities/dto/score-dto.entity';
+import { GameStateRequest } from './entities/util/game-state-request.entity';
 
 @Injectable()
 export class BoardService {
@@ -18,12 +20,12 @@ export class BoardService {
     private readonly turnService: TurnService
   ) { }
 
-  async setupBoard(matchId: string, setup: SetupDTO): Promise<GameState> {
+  async setupBoard(matchId: string, setup: SetupDTO): Promise<GameStateDTO> {
     await this.setupBoardService.setupBoard(matchId, setup);
     return this.getGameState(new GameStateRequest({matchId: matchId, layout: true, you: true}))
   }
 
-  async fireMissile(matchId, missile: MissileDTO): Promise<GameState> {
+  async fireMissile(matchId, missile: MissileDTO): Promise<GameStateDTO> {
     const scores = await this.scoreService.getScores(matchId);
     try {
       await this.getGameState(new GameStateRequest({matchId: matchId, layout: true, opponent: true}))
@@ -40,11 +42,11 @@ export class BoardService {
     return await this.getGameState(new GameStateRequest({matchId: matchId, layout: true, opponent: true}))
   }
 
-  async getGameState(gameStateRequest: GameStateRequest): Promise<GameState> {
+  async getGameState(gameStateRequest: GameStateRequest): Promise<GameStateDTO> {
     const {matchId, layout, score, you, opponent} = gameStateRequest;
-    const gameState = new GameState();
+    const gameState = new GameStateDTO();
     if (layout) {
-      gameState.layout = new Layout();
+      gameState.layout = new LayoutDTO();
       if (you) {
         gameState.layout.you = (await this.getBoardService.getYourBoard(matchId)).you
       }

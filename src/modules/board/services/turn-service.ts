@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
-import { Match } from 'src/modules/match/entities/database/match-table.entity';
+import { Match } from 'src/modules/match/entities/database/match.entity';
 
 @Injectable()
 export class TurnService {

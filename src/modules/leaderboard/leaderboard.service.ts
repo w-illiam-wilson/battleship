@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
-import { Match } from '../match/entities/database/match-table.entity';
+import { Match } from '../match/entities/database/match.entity';
 
 @Injectable()
 export class LeaderboardService {

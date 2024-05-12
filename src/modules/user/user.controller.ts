@@ -1,8 +1,9 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { UserDTO } from './entities/dto/user-dto';
+import { PostUserDTO } from './entities/dto/user-dto';
 import { UserService } from './user.service';
 import { LimitQuery } from 'src/entities/limit-query.entity';
+import { User } from './entities/database/user.entity';
 
 @Controller("/users")
 export class UserController {
@@ -11,22 +12,22 @@ export class UserController {
   @Get()
   async getUser(
     @Query() limitQuery: LimitQuery
-  ): Promise<UserDTO[]> {
+  ): Promise<User[]> {
     return await this.userService.getUsers(limitQuery.limit);
   }
 
   @Post()
   async createUser(
-    @Body() userDTO: UserDTO,
-  ): Promise<UserDTO> {
+    @Body() userDTO: PostUserDTO,
+  ): Promise<User> {
     return await this.userService.createUser(userDTO);
   }
 
   @Post("/login")
   async login(
-    @Body() userDTO: UserDTO,
+    @Body() userDTO: PostUserDTO,
     @Res({ passthrough: true }) response: Response
-  ): Promise<UserDTO> {
+  ): Promise<User> {
     return await this.userService.login(userDTO, response);
   }
   

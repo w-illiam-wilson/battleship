@@ -5,7 +5,7 @@ import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
 import { SetupDTO } from '../entities/dto/setup-dto.entity';
 import { ShipInfo, ShipPiece } from '../entities/dto/ship.entity';
-import { Match } from 'src/modules/match/entities/database/match-table.entity';
+import { Match } from 'src/modules/match/entities/database/match.entity';
 
 @Injectable()
 export class SetupBoardService {

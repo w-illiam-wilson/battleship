@@ -1,40 +1,63 @@
-import { IsIn, IsNotEmpty, IsNumber, IsString, Max, Min } from "class-validator";
+import { Type } from "class-transformer";
+import { IsDefined, IsEnum, IsInt, IsNotEmpty, IsNotEmptyObject, IsObject, Max, Min, ValidateNested} from "class-validator";
 
-const rightOrDown = ['RIGHT', 'DOWN'];
+enum Heading {
+    RIGHT = 'RIGHT',
+    DOWN = 'DOWN',
+}
 
-export class Position {
+export class PositionDTO {
     //this is the left most and upper most position of the boat
-    @IsNumber()
+    @IsInt()
     @IsNotEmpty()
     @Min(0)
     @Max(9)
     row: number;
 
-    @IsNumber()
+    @IsInt()
     @IsNotEmpty()
     @Min(0)
     @Max(9)
     column: number;
 
-    @IsString()
     @IsNotEmpty()
-    @IsIn(rightOrDown)
-    position: "RIGHT" | "DOWN"
+    @IsEnum(Heading)
+    position: Heading;
 }
 
 export class SetupDTO {
-    @IsNotEmpty()
-    A: Position;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => PositionDTO)
+    A: PositionDTO;
 
-    @IsNotEmpty()
-    B: Position;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => PositionDTO)
+    B: PositionDTO;
 
-    @IsNotEmpty()
-    C: Position;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => PositionDTO)
+    C: PositionDTO;
 
-    @IsNotEmpty()
-    D: Position;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => PositionDTO)
+    D: PositionDTO;
 
-    @IsNotEmpty()
-    E: Position;
+    @IsDefined()
+    @IsNotEmptyObject()
+    @IsObject()
+    @ValidateNested()
+    @Type(() => PositionDTO)
+    E: PositionDTO;
 }

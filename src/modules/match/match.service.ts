@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Match } from './entities/database/match-table.entity';
+import { Match } from './entities/database/match.entity';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
-import { CreateMatchDTO, MatchDTO } from './entities/dto/match-dto.entity';
+import { CreateMatchDTO } from './entities/dto/match-dto.entity';
 
 @Injectable()
 export class MatchService {
@@ -13,9 +13,13 @@ export class MatchService {
     private readonly clsService: ClsService
   ) { }
 
-  async createMatch(createMatchDTO: CreateMatchDTO): Promise<MatchDTO> {
+  async createMatch(createMatchDTO: CreateMatchDTO): Promise<Match> {
     const player_one = this.clsService.get("userId");
     const player_two = createMatchDTO.player_two;
+
+    if (player_one === player_two) {
+      throw new HttpException("You cannot play yourself", HttpStatus.BAD_REQUEST);
+    }
 
     const newMatch: Match = new Match();
 
@@ -26,7 +30,7 @@ export class MatchService {
     return createdMatch;
   }
 
-  async getMatch(matchId: string): Promise<MatchDTO> {
+  async getMatch(matchId: string): Promise<Match> {
     const matches = await this.getMatches(undefined, undefined, undefined, matchId);
     if (matches.length != 1) {
       throw new HttpException("Match not found", HttpStatus.NOT_FOUND)
@@ -35,7 +39,7 @@ export class MatchService {
     }
   }
 
-  async getMatches(userId: string, finished: boolean, limit: number, matchId?: string): Promise<MatchDTO[]> {
+  async getMatches(userId: string, finished: boolean, limit: number, matchId?: string): Promise<Match[]> {
     const query = this.matchRepository.createQueryBuilder('match')
       .select('match.match_id', 'match_id')
       .addSelect('match.match_time', 'match_time')

@@ -1,5 +1,5 @@
 import { Transform } from "class-transformer";
-import { IsBoolean, IsNumber, IsOptional, IsPositive, IsString } from "class-validator";
+import { IsBoolean, IsOptional, IsString } from "class-validator";
 import { LimitQuery } from "src/entities/limit-query.entity";
 
 export class MatchQuery extends LimitQuery {

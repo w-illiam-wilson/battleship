@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/database/board-table.entity';
-import { Layout, OpponentSquareCurrentState, YourSquareCurrentState } from '../entities/dto/game-state-dto';
+import { HitOrMiss, LayoutDTO, OpponentSquareCurrentState, YourSquareCurrentState } from '../entities/dto/game-state-dto.entity';
 
 @Injectable()
 export class GetBoardService {
@@ -13,10 +13,10 @@ export class GetBoardService {
         private readonly clsService: ClsService
     ) { }
 
-    async getYourBoard(matchId: string): Promise<Layout> {
+    async getYourBoard(matchId: string): Promise<LayoutDTO> {
         const userId = this.clsService.get("userId");
         const board: YourSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ piece: null, hit: false }));
-        const layout: Layout = new Layout()
+        const layout: LayoutDTO = new LayoutDTO()
         layout.you = board;
 
         const rows = await this.boardRepository.createQueryBuilder('board')
@@ -41,26 +41,26 @@ export class GetBoardService {
         return layout;
     }
 
-    async getOpponentBoard(matchId: string): Promise<Layout> {
+    async getOpponentBoard(matchId: string): Promise<LayoutDTO> {
         const userId = this.clsService.get("userId");
         const board: OpponentSquareCurrentState[][] = Array.from({ length: 10 }, () => Array(10).fill({ state: null }));
-        const layout: Layout = new Layout()
+        const layout: LayoutDTO = new LayoutDTO()
         layout.opponent = board;
 
-        const rows = await this.boardRepository.createQueryBuilder('board')
+        const squares = await this.boardRepository.createQueryBuilder('board')
             .select('board.row_number', 'row_number')
             .addSelect('board.column_number', 'column_number')
             .addSelect(`CASE WHEN board.hit = true AND board.piece IS NOT NULL THEN 'HIT' WHEN board.hit = true AND board.piece IS NULL THEN 'MISS' ELSE NULL END`, 'state')
             .where(`board.match_id = '${matchId}' and board.user_id != '${userId}'`)
             .getRawMany();
 
-        if (rows.length != 100) {
+        if (squares.length != 100) {
             throw new HttpException("Opponent's board not setup yet", HttpStatus.NOT_FOUND);
         }
 
-        rows.forEach((square, index) => {
+        squares.forEach((square) => {
             const yourSquare = new OpponentSquareCurrentState()
-            yourSquare.state = square.state;
+            yourSquare.state = HitOrMiss[square.state] ?? null;
             board[square.row_number][square.column_number] = yourSquare;
         })
         return layout;
