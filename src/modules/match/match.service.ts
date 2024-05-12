@@ -18,7 +18,7 @@ export class MatchService {
     const player_two = createMatchDTO.player_two;
 
     if (player_one === player_two) {
-      throw new HttpException("You cannot play yourself", HttpStatus.BAD_REQUEST);
+      throw new HttpException("Opponent must not be yourself", HttpStatus.BAD_REQUEST);
     }
 
     const newMatch: Match = new Match();
