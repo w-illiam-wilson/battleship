@@ -11,15 +11,40 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
-  
+  ) { }
+
+  async getUsers(limit: number): Promise<UserDTO[]> {
+    const query = this.userRepository.createQueryBuilder('user')
+      .select('user.user_id', 'user_id')
+    if (limit) {
+      query.limit(limit)
+    }
+
+    return await query.getRawMany()
+  }
+
+  async createUser(createUserDto: UserDTO): Promise<UserDTO> {
+    const newUser = new User();
+    newUser.user_id = createUserDto.user_id;
+    newUser.password = await encrypt(createUserDto.password);
+
+    const existingUser = await this.userRepository.findOneBy({ user_id: newUser.user_id });
+    if (existingUser) {
+      throw new HttpException("User already exists", HttpStatus.CONFLICT)
+    }
+
+    const createdUser = await this.userRepository.save(newUser);
+    delete createdUser.password;
+    return createdUser;
+  }
+
   async login(
     userDTO: UserDTO,
     response: Response
   ): Promise<UserDTO> {
     //attaches SESSION_TOKEN cookie open token object with user_id
     //also returns current open matches
-    const user = await this.userRepository.findOneBy({user_id: userDTO.user_id});
+    const user = await this.userRepository.findOneBy({ user_id: userDTO.user_id });
 
     if (!user) {
       throw new HttpException('This user is not found', HttpStatus.UNAUTHORIZED);
@@ -29,21 +54,11 @@ export class UsersService {
     } else {
       const encryptedUserId = await encrypt(userDTO.user_id)
       response.cookie('SESSION_TOKEN', encryptedUserId)
-      
+
       delete user.password;
       return user;
     }
-    
-  }
 
-  async createUser(createUserDto: UserDTO): Promise<UserDTO> {
-    const newUser = new User();
-    newUser.user_id = createUserDto.user_id;
-    newUser.password = await encrypt(createUserDto.password);
-    
-    const createdUser = await this.userRepository.save(newUser);
-    delete createdUser.password;
-    return createdUser;
   }
 
   async logout(

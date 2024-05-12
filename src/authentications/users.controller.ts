@@ -7,12 +7,11 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Post("/login")
-  async login(
-    @Body() userDTO: UserDTO,
-    @Res({ passthrough: true }) response: Response
-  ): Promise<UserDTO> {
-    return await this.usersService.login(userDTO, response);
+  @Get()
+  async getUser(
+    @Query("limit") limit?: number,
+  ): Promise<UserDTO[]> {
+    return await this.usersService.getUsers(limit);
   }
 
   @Post()
@@ -20,6 +19,14 @@ export class UsersController {
     @Body() userDTO: UserDTO,
   ): Promise<UserDTO> {
     return await this.usersService.createUser(userDTO);
+  }
+
+  @Post("/login")
+  async login(
+    @Body() userDTO: UserDTO,
+    @Res({ passthrough: true }) response: Response
+  ): Promise<UserDTO> {
+    return await this.usersService.login(userDTO, response);
   }
   
   @Post("/logout")

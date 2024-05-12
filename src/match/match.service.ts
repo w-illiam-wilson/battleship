@@ -38,9 +38,10 @@ export class MatchService {
     if (userId) {
       query.andWhere(`(match.player_one = '${userId}' OR match.player_two = '${userId}')`)
     }
-    if (current) {
-      console.log("yoohoo")
+    if (current === true) {
       query.andWhere('match.match_winner IS NULL')
+    } else if (current === false) {
+      query.andWhere('match.match_winner IS NOT NULL')
     }
     query.orderBy('match.match_time', 'DESC')
     if (limit) {
