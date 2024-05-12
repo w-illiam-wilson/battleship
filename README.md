@@ -12,7 +12,9 @@ $ npm install
 
 ## Setup
 
-Ensure postgres is running, then go into app.module and change the username/password/etc 
+Ensure postgres is running, then go into app.module and change the username/password/etc.
+
+In order to change encryption settings, go to src/modules/user/util/encryption.util.ts to adjust hardcoded keys.
 
 ## Running the app
 

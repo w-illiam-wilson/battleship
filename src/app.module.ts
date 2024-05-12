@@ -28,7 +28,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
       port: 5433,
       entities: [User, Match, Board],
       database: 'williamwilson',
-      synchronize: true,
+      synchronize: true, //turn this off after first run to simulate production environment
       logging: true,
     }),
   ],
