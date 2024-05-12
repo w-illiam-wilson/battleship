@@ -8,7 +8,7 @@ import { LimitQuery } from 'src/entities/limit-query.entity';
 export class LeaderboardController {
   constructor(private readonly matchService: LeaderboardService) {}
 
-  @Get() //would change this - doesnt match api spec really
+  @Get()
   async getLeaderboard(
     @Query() limitQuery: LimitQuery
   ): Promise<LeaderboardDTO[]> {
