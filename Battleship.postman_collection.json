@@ -1,0 +1,568 @@
+{
+	"info": {
+		"_postman_id": "f7ebfc49-3584-41ca-80a5-b0740949cc91",
+		"name": "Battleship",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29220259"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Users",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"{{player_three_username}}\",\n    \"password\": \"{{player_three_password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": \"{{player_three_usernfame}}4trfffdf\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    // \"user_id\": \"wwilson19\",\n    \"user_id\": \"mwilson21\",\n    \"password\": \"{{password}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/login",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Logout",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users/logout",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Leaderboard",
+			"item": [
+				{
+					"name": "Leaderboard",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/leaderboard",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"leaderboard"
+							],
+							"query": [
+								{
+									"key": "limit",
+									"value": "1",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Match",
+			"item": [
+				{
+					"name": "Matches",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/matches",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matches"
+							],
+							"query": [
+								{
+									"key": "finished",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "userId",
+									"value": "mwilson21",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Specific match",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/matches/{{match_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matches",
+								"{{match_id}}"
+							],
+							"query": [
+								{
+									"key": "current",
+									"value": "false",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "2",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create match",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"match_id\",pm.response.json().match_id)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"player_two\": \"mwilson21\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/matches",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"matches"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Board",
+			"item": [
+				{
+					"name": "create = boards/layout/you",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"A\": { //5 length\n        \"row\": 0,\n        \"column\": 0,\n        \"position\": \"DOWN\"\n    },\n    \"B\": { //4 length\n        \"row\": 0,\n        \"column\": 1,\n        \"position\": \"DOWN\"\n    },\n    \"C\": { //4 length\n        \"row\": 0,\n        \"column\": 2,\n        \"position\": \"DOWN\"\n    },\n    \"D\": { //3 length\n        \"row\": 0,\n        \"column\": 3,\n        \"position\": \"DOWN\"\n    },\n    \"E\": { // 2 length\n        \"row\": 5,\n        \"column\": 0,\n        \"position\": \"RIGHT\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/layout/you",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"layout",
+								"you"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "missile = boards/layout/opponent",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"row\": 0,\n    \"column\": 0\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/layout/opponent",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"layout",
+								"opponent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/score",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/score",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"score"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/score/you",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/score/you",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"score",
+								"you"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/score/opponent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/score/opponent",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"score",
+								"opponent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/layout",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/layout",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"layout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/layout/you",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/layout/you",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"layout",
+								"you"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/layout/opponent",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/layout/opponent",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"layout",
+								"opponent"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
