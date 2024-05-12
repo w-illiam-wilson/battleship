@@ -46,12 +46,10 @@ export class UsersService {
     //also returns current open matches
     const user = await this.userRepository.findOneBy({ user_id: userDTO.user_id });
 
-    if (!user) {
-      throw new HttpException('This user is not found', HttpStatus.UNAUTHORIZED);
+    if (!user || await decrypt(user.password) !== userDTO.password) {
+      throw new HttpException('Wrong credentials', HttpStatus.UNAUTHORIZED);
     }
-    if (await decrypt(user.password) !== userDTO.password) {
-      throw new HttpException('Wrong password', HttpStatus.UNAUTHORIZED);
-    } else {
+    else {
       const encryptedUserId = await encrypt(userDTO.user_id)
       response.cookie('SESSION_TOKEN', encryptedUserId)
 
