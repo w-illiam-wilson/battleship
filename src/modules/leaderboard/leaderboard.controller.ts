@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
 import { LeaderboardService } from './leaderboard.service';
 import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
-import { LimitQuery } from 'src/entities/limit-query.entity';
+import { LeaderboardQuery } from './entities/dto/leaderboard-query.entity';
 
 
 @Controller("/leaderboard")
@@ -10,9 +10,9 @@ export class LeaderboardController {
 
   @Get()
   async getLeaderboard(
-    @Query() limitQuery: LimitQuery
+    @Query() leaderboardQuery: LeaderboardQuery
   ): Promise<LeaderboardDTO[]> {
-    return await this.matchService.getLeaderboard(limitQuery.limit);
+    return await this.matchService.getLeaderboard(leaderboardQuery.userId, leaderboardQuery.limit);
   }
   
 }

@@ -11,17 +11,26 @@ export class LeaderboardService {
     private matchRepository: Repository<Match>,
   ) { }
 
-  async getLeaderboard(limit?: number): Promise<LeaderboardDTO[]> {
-    let query = this.matchRepository.createQueryBuilder('match')
-      .select('match.match_winner', 'player')
-      .addSelect('COUNT(*)', 'wins')
-      .where('match.match_winner IS NOT NULL')
-      .groupBy('match.match_winner')
-      .orderBy('wins', 'DESC')
-    if (limit) {
-      query = query.limit(limit);
+  async getLeaderboard(userId: string, limit?: number): Promise<LeaderboardDTO[]> {
+    let query = `
+    SELECT 
+        matches.user_id,
+        CAST(COALESCE(SUM(CASE WHEN matches.match_winner = matches.user_id THEN 1 ELSE 0 END), 0) AS INT) AS wins,
+        CAST(COALESCE(SUM(CASE WHEN matches.match_winner != matches.user_id THEN 1 ELSE 0 END), 0) AS INT) AS losses
+    FROM (
+        SELECT player_one AS user_id, match_winner FROM match
+        UNION ALL
+        SELECT player_two AS user_id, match_winner FROM match
+    ) AS matches`;
+    if (userId) {
+      query += ` where user_id='${userId}'`
     }
-
-    return await query.getRawMany()
+    query += ' GROUP BY matches.user_id'
+    if (limit) {
+      query += ` LIMIT ${limit}`
+    }
+    
+    return this.matchRepository.query(query);
+    
   }
 }

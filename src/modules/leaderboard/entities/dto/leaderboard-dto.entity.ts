@@ -1,4 +1,5 @@
 export class LeaderboardDTO {
-    player: string;
-    wins: string;
+    user_id: string;
+    wins: number;
+    losses: number;
 }
