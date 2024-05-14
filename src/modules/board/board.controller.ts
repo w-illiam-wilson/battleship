@@ -2,55 +2,58 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { SetupDTO } from './entities/dto/setup-dto.entity';
 import { MissileDTO } from './entities/dto/missile-dto.entity';
-import { GameStateDTO, OpponentSquareCurrentStateDTO } from './entities/dto/game-state-dto.entity';
+import {
+  GameStateDTO,
+  OpponentSquareCurrentStateDTO,
+} from './entities/dto/game-state-dto.entity';
 import { MatchParam } from 'src/entities/match-param.entity';
 import { GameStateRequest } from './entities/util/game-state-request.entity';
 
-@Controller("/boards")
+@Controller('/boards')
 export class BoardsController {
   constructor(private readonly gameService: BoardService) {}
 
-  @Get(":matchId/layout/you")
+  @Get(':matchId/layout/you')
   async getBoardsLayoutYou(
     @Param() matchParam: MatchParam,
   ): Promise<GameStateDTO> {
     const gameStateRequest = new GameStateRequest({
       matchId: matchParam.matchId,
       layout: true,
-      you: true
+      you: true,
     });
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Post(":matchId/layout/you")
+  @Post(':matchId/layout/you')
   async setupBoard(
     @Param() matchParam: MatchParam,
-    @Body() setup: SetupDTO
+    @Body() setup: SetupDTO,
   ): Promise<GameStateDTO> {
     return await this.gameService.setupBoard(matchParam.matchId, setup);
   }
 
-  @Get(":matchId/layout/opponent")
+  @Get(':matchId/layout/opponent')
   async getBoardsLayoutOpponent(
     @Param() matchParam: MatchParam,
   ): Promise<GameStateDTO> {
     const gameStateRequest = new GameStateRequest({
       matchId: matchParam.matchId,
       layout: true,
-      opponent: true
+      opponent: true,
     });
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Post(":matchId/layout/opponent")
+  @Post(':matchId/layout/opponent')
   async fireMissile(
     @Param() matchParam: MatchParam,
-    @Body() missile: MissileDTO
+    @Body() missile: MissileDTO,
   ): Promise<OpponentSquareCurrentStateDTO> {
     return await this.gameService.fireMissile(matchParam.matchId, missile);
   }
 
-  @Get(":matchId/layout")
+  @Get(':matchId/layout')
   async getBoardsLayout(
     @Param() matchParam: MatchParam,
   ): Promise<GameStateDTO> {
@@ -58,12 +61,12 @@ export class BoardsController {
       matchId: matchParam.matchId,
       layout: true,
       you: true,
-      opponent: true
+      opponent: true,
     });
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Get(":matchId/score/you")
+  @Get(':matchId/score/you')
   async getBoardsScoreYou(
     @Param() matchParam: MatchParam,
   ): Promise<GameStateDTO> {
@@ -75,7 +78,7 @@ export class BoardsController {
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Get(":matchId/score/opponent")
+  @Get(':matchId/score/opponent')
   async getBoardsScoreOpponent(
     @Param() matchParam: MatchParam,
   ): Promise<GameStateDTO> {
@@ -87,29 +90,25 @@ export class BoardsController {
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Get(":matchId/score")
-  async getBoardsScore(
-    @Param() matchParam: MatchParam,
-  ): Promise<GameStateDTO> {
+  @Get(':matchId/score')
+  async getBoardsScore(@Param() matchParam: MatchParam): Promise<GameStateDTO> {
     const gameStateRequest = new GameStateRequest({
       matchId: matchParam.matchId,
       score: true,
       you: true,
-      opponent: true
+      opponent: true,
     });
     return await this.gameService.getGameState(gameStateRequest);
   }
 
-  @Get(":matchId")
-  async getBoards(
-    @Param() matchParam: MatchParam,
-  ): Promise<GameStateDTO> {
+  @Get(':matchId')
+  async getBoards(@Param() matchParam: MatchParam): Promise<GameStateDTO> {
     const gameStateRequest = new GameStateRequest({
       matchId: matchParam.matchId,
       layout: true,
       score: true,
       you: true,
-      opponent: true
+      opponent: true,
     });
     return await this.gameService.getGameState(gameStateRequest);
   }

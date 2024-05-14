@@ -3,38 +3,32 @@ import { Response } from 'express';
 import { PostUserDTO } from './entities/dto/user-dto';
 import { UserService } from './user.service';
 import { LimitQuery } from 'src/entities/limit-query.entity';
-import { User } from './entities/database/user.entity';
+import { User } from './entities/repository/user.entity';
 
-@Controller("/users")
+@Controller('/users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUser(
-    @Query() limitQuery: LimitQuery
-  ): Promise<User[]> {
+  async getUser(@Query() limitQuery: LimitQuery): Promise<User[]> {
     return await this.userService.getUsers(limitQuery.limit);
   }
 
   @Post()
-  async createUser(
-    @Body() userDTO: PostUserDTO,
-  ): Promise<User> {
+  async createUser(@Body() userDTO: PostUserDTO): Promise<User> {
     return await this.userService.createUser(userDTO);
   }
 
-  @Post("/login")
+  @Post('/login')
   async login(
     @Body() userDTO: PostUserDTO,
-    @Res({ passthrough: true }) response: Response
+    @Res({ passthrough: true }) response: Response,
   ): Promise<User> {
     return await this.userService.login(userDTO, response);
   }
-  
-  @Post("/logout")
-  async logout(
-    @Res({ passthrough: true }) response: Response
-  ) {
+
+  @Post('/logout')
+  async logout(@Res({ passthrough: true }) response: Response) {
     //clears SESSION_TOKEN and invalidates session id on ticket server
     await this.userService.logout(response);
   }

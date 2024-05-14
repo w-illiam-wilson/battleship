@@ -8,4 +8,4 @@ import { MatchModule } from '../match/match.module';
   controllers: [LeaderboardController],
   providers: [LeaderboardService],
 })
-export class LeaderboardModule { }
+export class LeaderboardModule {}

@@ -1,6 +1,7 @@
-import { IsUUID } from "class-validator";
+import { IsNotEmpty, IsUUID } from 'class-validator';
 
 export class MatchParam {
-    @IsUUID()
-    matchId: string;
-  }
+  @IsUUID()
+  @IsNotEmpty()
+  matchId: string;
+}

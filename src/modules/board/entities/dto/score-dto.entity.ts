@@ -1,4 +1,4 @@
 export class Score {
-    you: number
-    opponent: number
+  you: number;
+  opponent: number;
 }
