@@ -92,7 +92,7 @@ export class BoardService {
       }
     }
     if (turn) {
-      gameState.turn = await this.turnService.getTurn(matchId);
+      gameState.turn = await this.turnService.getPlayer(matchId);
     }
     return gameState;
   }

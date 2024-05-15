@@ -11,20 +11,18 @@ export class TurnService {
 
   async isYourTurn(matchId: string): Promise<boolean> {
     const userId = this.clsService.get('userId');
-    const playerTurn = await this.matchRepository
-      .createQueryBuilder('match')
-      .select(
-        `CASE WHEN match.player_one_turn = true THEN match.player_one WHEN match.player_one_turn != true THEN match.player_two END`,
-        'player_turn',
-      )
-      .where(`match.match_id = '${matchId}'`)
-      .getRawOne();
+    const playerTurn = await this.getTurn(matchId);
 
     return playerTurn.player_turn === userId;
   }
 
-  async getTurn(matchId: string): Promise<string> {
-    const playerTurn = await this.matchRepository
+  async getPlayer(matchId: string): Promise<string> {
+    const playerTurn = await this.getTurn(matchId);
+    return playerTurn.player_turn;
+  }
+
+  private async getTurn(matchId) {
+    return await this.matchRepository
       .createQueryBuilder('match')
       .select(
         `CASE WHEN match.player_one_turn = true THEN match.player_one WHEN match.player_one_turn != true THEN match.player_two END`,
@@ -32,7 +30,5 @@ export class TurnService {
       )
       .where(`match.match_id = '${matchId}'`)
       .getRawOne();
-
-    return playerTurn.player_turn;
   }
 }
