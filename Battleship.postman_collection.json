@@ -27,7 +27,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users?limit=2",
+							"raw": "localhost:3000/users",
 							"host": [
 								"localhost"
 							],
@@ -38,7 +38,8 @@
 							"query": [
 								{
 									"key": "limit",
-									"value": "2"
+									"value": "2",
+									"disabled": true
 								}
 							]
 						}
@@ -52,7 +53,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"{{player_one_username}}\",\n    \"password\": \"{{password}}\"\n}",
+							"raw": "{\n    \"user_id\": \"{{player_three_username}}\",\n    \"password\": \"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -79,7 +80,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"user_id\": \"{{player_one_username}}\",\n    \"password\": \"{{password}}\"\n}",
+							"raw": "{\n    \"user_id\": \"{{player_two_username}}\",\n    \"password\": \"{{password}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -165,7 +166,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/matches?finished=false&limit=1&userId=mwilson21",
+							"raw": "localhost:3000/matches?finished=false",
 							"host": [
 								"localhost"
 							],
@@ -180,11 +181,13 @@
 								},
 								{
 									"key": "limit",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								},
 								{
 									"key": "userId",
-									"value": "mwilson21"
+									"value": "jhouchen19",
+									"disabled": true
 								}
 							]
 						}
@@ -205,18 +208,6 @@
 							"path": [
 								"matches",
 								"{{match_id}}"
-							],
-							"query": [
-								{
-									"key": "current",
-									"value": "false",
-									"disabled": true
-								},
-								{
-									"key": "limit",
-									"value": "2",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -251,7 +242,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"player_two\": \"wwilson19\"\n}",
+							"raw": "{\n    \"player_two\": \"mwilson21\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -283,7 +274,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"A\": { //5 length\n        \"row\": 0,\n        \"column\": 0,\n        \"position\": \"DOWN\"\n    },\n    \"B\": { //4 length\n        \"row\": 0,\n        \"column\": 1,\n        \"position\": \"DOWN\"\n    },\n    \"C\": { //4 length\n        \"row\": 0,\n        \"column\": 2,\n        \"position\": \"DOWN\"\n    },\n    \"D\": { //3 length\n        \"row\": 0,\n        \"column\": 3,\n        \"position\": \"DOWN\"\n    },\n    \"E\": { // 2 length\n        \"row\": 5,\n        \"column\": 0,\n        \"position\": \"RIGHT\"\n    }\n}",
+							"raw": "{\n    \"ships\": [\n        { //5 length\n            \"ship\": \"A\",\n            \"row\": 0,\n            \"column\": 0,\n            \"position\": \"DOWN\"\n        },\n        { //4 length\n            \"ship\": \"B\",\n            \"row\": 0,\n            \"column\": 1,\n            \"position\": \"DOWN\"\n        },\n        { //4 length\n            \"ship\": \"C\",\n            \"row\": 0,\n            \"column\": 2,\n            \"position\": \"DOWN\"\n        },\n        { //3 length\n            \"ship\": \"D\",\n            \"row\": 0,\n            \"column\": 3,\n            \"position\": \"DOWN\"\n        },\n        { // 2 length\n            \"ship\": \"E\",\n            \"row\": 5,\n            \"column\": 0,\n            \"position\": \"RIGHT\"\n        }\n    ]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -362,6 +353,38 @@
 							"path": [
 								"boards",
 								"{{match_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "boards/turn",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/boards/{{match_id}}/turn",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"boards",
+								"{{match_id}}",
+								"turn"
 							]
 						}
 					},
