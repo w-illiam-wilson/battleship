@@ -1,7 +1,7 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { LeaderboardService } from './leaderboard.service';
-import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
-import { LeaderboardQuery } from './entities/dto/leaderboard-query.entity';
+import { LeaderboardService } from '../../leaderboard/services/leaderboard.service';
+import { LeaderboardDTO } from '../../leaderboard/entities/dto/leaderboard-dto.entity';
+import { LeaderboardQuery } from '../../leaderboard/entities/dto/leaderboard-query.entity';
 
 @Controller('/leaderboard')
 export class LeaderboardController {

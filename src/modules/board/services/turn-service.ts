@@ -1,19 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import { ClsService } from 'nestjs-cls';
-import { Match } from 'src/modules/match/entities/repository/match.entity';
+import { MatchRepository } from 'src/modules/match/repositories/match.repository';
 
 @Injectable()
 export class TurnService {
   constructor(
-    @InjectRepository(Match)
-    private matchRepository: Repository<Match>,
+    private readonly matchRepository: MatchRepository,
     private readonly clsService: ClsService,
   ) {}
 
   async isYourTurn(matchId: string): Promise<boolean> {
-    // return true;
     const userId = this.clsService.get('userId');
     const playerTurn = await this.matchRepository
       .createQueryBuilder('match')
@@ -23,6 +19,7 @@ export class TurnService {
       )
       .where(`match.match_id = '${matchId}'`)
       .getRawOne();
+
     return playerTurn.player_turn === userId;
   }
 }

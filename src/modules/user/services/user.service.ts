@@ -1,27 +1,20 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PostUserDTO } from './entities/dto/user-dto';
+import { PostUserDTO } from '../entities/dto/user-dto';
 import { Response } from 'express';
 import { decrypt, encrypt } from 'src/modules/user/util/encryption.util';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './entities/repository/user.entity';
+import { User } from '../entities/repository/user.entity';
 import { Repository } from 'typeorm';
+import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    private readonly userRepository: UserRepository,
   ) {}
 
   async getUsers(limit: number): Promise<User[]> {
-    const query = this.userRepository
-      .createQueryBuilder('user')
-      .select('user.user_id', 'user_id');
-    if (limit) {
-      query.limit(limit);
-    }
-
-    return await query.getRawMany();
+    return await this.userRepository.getUsersWithLimit(limit);
   }
 
   async createUser(createUserDTO: PostUserDTO): Promise<User> {

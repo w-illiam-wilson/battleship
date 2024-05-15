@@ -1,5 +1,5 @@
 import { Score } from './score-dto.entity';
-import { ShipPiece } from './ship.entity';
+import { ShipPiece } from '../util/ship-info.entity';
 
 export enum HitOrMiss {
   HIT = 'HIT',

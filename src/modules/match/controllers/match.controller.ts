@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
-import { MatchService } from './match.service';
-import { CreateMatchDTO } from './entities/dto/match-dto.entity';
-import { MatchQuery } from './entities/dto/match-query.entity';
-import { MatchParam } from '../../entities/match-param.entity';
-import { Match } from './entities/repository/match.entity';
+import { MatchService } from '../services/match.service';
+import { CreateMatchDTO } from '../entities/dto/match-dto.entity';
+import { MatchQuery } from '../entities/dto/match-query.entity';
+import { MatchParam } from '../../../entities/match-param.entity';
+import { Match } from '../entities/repository/match.entity';
 
 @Controller('/matches')
 export class MatchController {
@@ -14,6 +14,7 @@ export class MatchController {
     return await this.matchService.getMatches(
       matchQuery.userId,
       matchQuery.finished,
+      undefined,
       matchQuery.limit,
     );
   }

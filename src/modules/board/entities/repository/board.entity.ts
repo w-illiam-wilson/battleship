@@ -10,7 +10,7 @@ import {
   Repository,
   AfterUpdate,
 } from 'typeorm';
-import { ShipPiece } from '../dto/ship.entity';
+import { ShipPiece } from '../util/ship-info.entity';
 import { Match } from 'src/modules/match/entities/repository/match.entity';
 import { User } from 'src/modules/user/entities/repository/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';

@@ -1,22 +1,30 @@
 import { Type } from 'class-transformer';
 import {
-  IsDefined,
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
   IsEnum,
   IsInt,
   IsNotEmpty,
-  IsNotEmptyObject,
-  IsObject,
   Max,
   Min,
   ValidateNested,
 } from 'class-validator';
 
-enum Heading {
+export enum Heading {
   RIGHT = 'RIGHT',
   DOWN = 'DOWN',
 }
 
-export class PositionDTO {
+export enum ShipName {
+  A = "A",
+  B = "B",
+  C = "C",
+  D = "D",
+  E = "E"
+}
+
+export class ShipPositionDTO {
   //this is the left most and upper most position of the boat
   @IsInt()
   @IsNotEmpty()
@@ -33,41 +41,17 @@ export class PositionDTO {
   @IsNotEmpty()
   @IsEnum(Heading)
   position: Heading;
+
+  @IsNotEmpty()
+  @IsEnum(ShipName)
+  ship: ShipName
 }
 
 export class SetupDTO {
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => PositionDTO)
-  A: PositionDTO;
-
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => PositionDTO)
-  B: PositionDTO;
-
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => PositionDTO)
-  C: PositionDTO;
-
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => PositionDTO)
-  D: PositionDTO;
-
-  @IsDefined()
-  @IsNotEmptyObject()
-  @IsObject()
-  @ValidateNested()
-  @Type(() => PositionDTO)
-  E: PositionDTO;
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayMinSize(5)
+  @ArrayMaxSize(5)
+  @Type(() => ShipPositionDTO)
+  ships: ShipPositionDTO[];
 }

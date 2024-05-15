@@ -1,18 +1,18 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { SetupDTO } from './entities/dto/setup-dto.entity';
+import { SetupDTO } from '../entities/dto/setup-dto.entity';
 import {
   GameStateDTO,
   LayoutDTO,
   OpponentSquareCurrentStateDTO,
-} from './entities/dto/game-state-dto.entity';
-import { MissileDTO } from './entities/dto/missile-dto.entity';
-import { SetupBoardService } from './services/setup-board.service';
-import { GetBoardService } from './services/get-board.service';
-import { ScoreService } from './services/score.service';
-import { TurnService } from './services/turn-service';
-import { MissileService } from './services/missile.service';
-import { Score } from './entities/dto/score-dto.entity';
-import { GameStateRequest } from './entities/util/game-state-request.entity';
+} from '../entities/dto/game-state-dto.entity';
+import { MissileDTO } from '../entities/dto/missile-dto.entity';
+import { SetupBoardService } from './setup-board.service';
+import { GetBoardService } from './get-board.service';
+import { ScoreService } from './score.service';
+import { TurnService } from './turn-service';
+import { MissileService } from './missile.service';
+import { Score } from '../entities/dto/score-dto.entity';
+import { GameStateRequest } from '../entities/util/game-state-request.entity';
 
 @Injectable()
 export class BoardService {

@@ -19,25 +19,10 @@ export enum ShipPiece {
   E2 = 'E2',
 }
 
-export const ShipInfo = {
-  A: {
-    length: 5,
-    name: 'A',
-  },
-  B: {
-    length: 4,
-    name: 'B',
-  },
-  C: {
-    length: 4,
-    name: 'C',
-  },
-  D: {
-    length: 3,
-    name: 'D',
-  },
-  E: {
-    length: 2,
-    name: 'E',
-  },
-};
+export const ShipLength = {
+  A: 5,
+  B: 4,
+  C: 4,
+  D: 3,
+  E: 2
+}

@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { LeaderboardDTO } from './entities/dto/leaderboard-dto.entity';
-import { Match } from '../match/entities/repository/match.entity';
+import { LeaderboardDTO } from '../entities/dto/leaderboard-dto.entity';
+import { MatchRepository } from '../../match/repositories/match.repository';
 
 @Injectable()
 export class LeaderboardService {
   constructor(
-    @InjectRepository(Match)
-    private matchRepository: Repository<Match>,
+    private readonly matchRepository: MatchRepository,
   ) {}
 
   async getLeaderboard(
@@ -31,11 +28,13 @@ export class LeaderboardService {
     };
 
     query += ' GROUP BY matches.user_id';
-    
+
+    query += ' ORDER BY wins DESC'
+
     if (limit) {
       query += ` LIMIT ${limit}`;
     }
 
-    return this.matchRepository.query(query);
+    return await this.matchRepository.query(query);
   }
 }

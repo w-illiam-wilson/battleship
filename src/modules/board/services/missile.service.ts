@@ -9,19 +9,19 @@ import {
   HitOrMiss,
   OpponentSquareCurrentStateDTO,
 } from '../entities/dto/game-state-dto.entity';
+import { MatchRepository } from 'src/modules/match/repositories/match.repository';
+import { BoardRepository } from '../repositories/board.repository';
 
 @Injectable()
 export class MissileService {
   constructor(
-    @InjectRepository(Board)
-    private boardRepository: Repository<Board>,
-    @InjectRepository(Match)
-    private matchRepository: Repository<Match>,
+    private readonly boardRepository: BoardRepository,
+    private readonly matchRepository: MatchRepository,
     private readonly clsService: ClsService,
   ) {}
 
   async fireMissile(
-    matchId,
+    matchId: string,
     missile: MissileDTO,
   ): Promise<OpponentSquareCurrentStateDTO> {
     const userId = this.clsService.get('userId');

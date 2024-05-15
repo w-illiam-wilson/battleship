@@ -9,12 +9,12 @@ import {
   OpponentSquareCurrentStateDTO,
   YourSquareCurrentStateDTO,
 } from '../entities/dto/game-state-dto.entity';
+import { BoardRepository } from '../repositories/board.repository';
 
 @Injectable()
 export class GetBoardService {
   constructor(
-    @InjectRepository(Board)
-    private boardRepository: Repository<Board>,
+    private readonly boardRepository: BoardRepository,
     private readonly clsService: ClsService,
   ) {}
 
@@ -27,16 +27,7 @@ export class GetBoardService {
     const layout: LayoutDTO = new LayoutDTO();
     layout.you = board;
 
-    const rows = await this.boardRepository
-      .createQueryBuilder('board')
-      .select('board.row_number', 'row_number')
-      .addSelect('board.column_number', 'column_number')
-      .addSelect('board.piece', 'piece')
-      .addSelect('board.hit', 'hit')
-      .where(`board.match_id = '${matchId}' and board.user_id = '${userId}'`)
-      .orderBy('row_number', 'ASC')
-      .addOrderBy('column_number', 'ASC')
-      .getRawMany();
+    const rows = await this.boardRepository.getYourBoardByMatchIdUserId(matchId, userId);
 
     if (rows.length != 100) {
       throw new HttpException(
@@ -45,12 +36,13 @@ export class GetBoardService {
       );
     }
 
-    rows.forEach((square, index) => {
+    rows.forEach((square) => {
       const yourSquare = new YourSquareCurrentStateDTO();
       yourSquare.piece = square.piece;
       yourSquare.hit = square.hit;
       board[square.row_number][square.column_number] = yourSquare;
     });
+
     return layout;
   }
 
@@ -63,16 +55,7 @@ export class GetBoardService {
     const layout: LayoutDTO = new LayoutDTO();
     layout.opponent = board;
 
-    const squares = await this.boardRepository
-      .createQueryBuilder('board')
-      .select('board.row_number', 'row_number')
-      .addSelect('board.column_number', 'column_number')
-      .addSelect(
-        `CASE WHEN board.hit = true AND board.piece IS NOT NULL THEN 'HIT' WHEN board.hit = true AND board.piece IS NULL THEN 'MISS' ELSE NULL END`,
-        'state',
-      )
-      .where(`board.match_id = '${matchId}' and board.user_id != '${userId}'`)
-      .getRawMany();
+    const squares = await this.boardRepository.getOpponentBoardByMatchIdUserId(matchId, userId)
 
     if (squares.length != 100) {
       throw new HttpException(
@@ -86,6 +69,7 @@ export class GetBoardService {
       yourSquare.state = HitOrMiss[square.state] ?? null;
       board[square.row_number][square.column_number] = yourSquare;
     });
+    
     return layout;
   }
 }

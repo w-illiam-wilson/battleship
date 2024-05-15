@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { LeaderboardController } from './leaderboard.controller';
-import { LeaderboardService } from './leaderboard.service';
-import { MatchModule } from '../match/match.module';
+import { LeaderboardService } from './services/leaderboard.service';
+import { LeaderboardController } from './controllers/leaderboard.controller';
+import { MatchModule } from 'src/modules/match/match.module';
 
 @Module({
   imports: [MatchModule],

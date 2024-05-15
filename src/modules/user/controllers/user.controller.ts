@@ -1,9 +1,9 @@
 import { Body, Controller, Get, Post, Query, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { PostUserDTO } from './entities/dto/user-dto';
-import { UserService } from './user.service';
+import { PostUserDTO } from '../entities/dto/user-dto';
+import { UserService } from '../services/user.service';
 import { LimitQuery } from 'src/entities/limit-query.entity';
-import { User } from './entities/repository/user.entity';
+import { User } from '../entities/repository/user.entity';
 
 @Controller('/users')
 export class UserController {
