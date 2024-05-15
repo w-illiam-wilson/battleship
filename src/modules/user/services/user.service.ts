@@ -9,9 +9,7 @@ import { UserRepository } from '../repositories/user.repository';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private readonly userRepository: UserRepository,
-  ) {}
+  constructor(private readonly userRepository: UserRepository) {}
 
   async getUsers(limit: number): Promise<User[]> {
     return await this.userRepository.getUsersWithLimit(limit);

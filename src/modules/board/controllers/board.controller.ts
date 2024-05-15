@@ -101,12 +101,22 @@ export class BoardsController {
     return await this.gameService.getGameState(gameStateRequest);
   }
 
+  @Get(':matchId/turn')
+  async getBoardsTurn(@Param() matchParam: MatchParam): Promise<GameStateDTO> {
+    const gameStateRequest = new GameStateRequest({
+      matchId: matchParam.matchId,
+      turn: true,
+    });
+    return await this.gameService.getGameState(gameStateRequest);
+  }
+
   @Get(':matchId')
   async getBoards(@Param() matchParam: MatchParam): Promise<GameStateDTO> {
     const gameStateRequest = new GameStateRequest({
       matchId: matchParam.matchId,
       layout: true,
       score: true,
+      turn: true,
       you: true,
       opponent: true,
     });

@@ -22,4 +22,17 @@ export class TurnService {
 
     return playerTurn.player_turn === userId;
   }
+
+  async getTurn(matchId: string): Promise<string> {
+    const playerTurn = await this.matchRepository
+      .createQueryBuilder('match')
+      .select(
+        `CASE WHEN match.player_one_turn = true THEN match.player_one WHEN match.player_one_turn != true THEN match.player_two END`,
+        'player_turn',
+      )
+      .where(`match.match_id = '${matchId}'`)
+      .getRawOne();
+
+    return playerTurn.player_turn;
+  }
 }

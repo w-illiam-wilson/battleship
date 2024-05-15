@@ -53,6 +53,11 @@ export class MatchService {
     matchId: string,
     limit: number,
   ): Promise<Match[]> {
-    return await this.matchRepository.getMatchesByUserIdFinishedMatchId(userId, finished, matchId, limit);
+    return await this.matchRepository.getMatchesByUserIdFinishedMatchId(
+      userId,
+      finished,
+      matchId,
+      limit,
+    );
   }
 }

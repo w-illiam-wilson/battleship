@@ -4,9 +4,7 @@ import { MatchRepository } from '../../match/repositories/match.repository';
 
 @Injectable()
 export class LeaderboardService {
-  constructor(
-    private readonly matchRepository: MatchRepository,
-  ) {}
+  constructor(private readonly matchRepository: MatchRepository) {}
 
   async getLeaderboard(
     userId: string,
@@ -25,11 +23,11 @@ export class LeaderboardService {
 
     if (userId) {
       query += ` where user_id='${userId}'`;
-    };
+    }
 
     query += ' GROUP BY matches.user_id';
 
-    query += ' ORDER BY wins DESC'
+    query += ' ORDER BY wins DESC';
 
     if (limit) {
       query += ` LIMIT ${limit}`;

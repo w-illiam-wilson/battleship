@@ -23,4 +23,5 @@ export class LayoutDTO {
 export class GameStateDTO {
   layout: LayoutDTO;
   score: Score;
+  turn: string;
 }

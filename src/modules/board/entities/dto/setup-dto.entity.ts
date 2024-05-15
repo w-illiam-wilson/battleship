@@ -17,11 +17,11 @@ export enum Heading {
 }
 
 export enum ShipName {
-  A = "A",
-  B = "B",
-  C = "C",
-  D = "D",
-  E = "E"
+  A = 'A',
+  B = 'B',
+  C = 'C',
+  D = 'D',
+  E = 'E',
 }
 
 export class ShipPositionDTO {
@@ -44,7 +44,7 @@ export class ShipPositionDTO {
 
   @IsNotEmpty()
   @IsEnum(ShipName)
-  ship: ShipName
+  ship: ShipName;
 }
 
 export class SetupDTO {

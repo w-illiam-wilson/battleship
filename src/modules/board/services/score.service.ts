@@ -22,21 +22,16 @@ export class ScoreService {
     )?.score;
 
     if (!yourScore) {
-      yourScore = 18;
+      yourScore = 0;
     }
     if (!opponentScore) {
-      opponentScore = 18;
-    }
-
-    if (results.length != 2) {
-      yourScore = 0;
       opponentScore = 0;
     }
 
     const score = new Score();
     score.you = Number(yourScore);
     score.opponent = Number(opponentScore);
-    
+
     return score;
   }
 }

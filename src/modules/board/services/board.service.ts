@@ -66,7 +66,7 @@ export class BoardService {
   async getGameState(
     gameStateRequest: GameStateRequest,
   ): Promise<GameStateDTO> {
-    const { matchId, layout, score, you, opponent } = gameStateRequest;
+    const { matchId, layout, score, you, turn, opponent } = gameStateRequest;
     const gameState = new GameStateDTO();
     if (layout) {
       gameState.layout = new LayoutDTO();
@@ -90,6 +90,9 @@ export class BoardService {
       if (opponent) {
         gameState.score.opponent = scores.opponent;
       }
+    }
+    if (turn) {
+      gameState.turn = await this.turnService.getTurn(matchId);
     }
     return gameState;
   }

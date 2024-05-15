@@ -27,7 +27,10 @@ export class GetBoardService {
     const layout: LayoutDTO = new LayoutDTO();
     layout.you = board;
 
-    const rows = await this.boardRepository.getYourBoardByMatchIdUserId(matchId, userId);
+    const rows = await this.boardRepository.getYourBoardByMatchIdUserId(
+      matchId,
+      userId,
+    );
 
     if (rows.length != 100) {
       throw new HttpException(
@@ -55,7 +58,10 @@ export class GetBoardService {
     const layout: LayoutDTO = new LayoutDTO();
     layout.opponent = board;
 
-    const squares = await this.boardRepository.getOpponentBoardByMatchIdUserId(matchId, userId)
+    const squares = await this.boardRepository.getOpponentBoardByMatchIdUserId(
+      matchId,
+      userId,
+    );
 
     if (squares.length != 100) {
       throw new HttpException(
@@ -69,7 +75,7 @@ export class GetBoardService {
       yourSquare.state = HitOrMiss[square.state] ?? null;
       board[square.row_number][square.column_number] = yourSquare;
     });
-    
+
     return layout;
   }
 }

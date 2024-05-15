@@ -30,11 +30,11 @@ export class Match {
   @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   match_time: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'player_one', referencedColumnName: 'user_id' })
   playerOneUser: User;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'player_two', referencedColumnName: 'user_id' })
   playerTwoUser: User;
 

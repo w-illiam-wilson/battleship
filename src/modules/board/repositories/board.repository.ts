@@ -9,12 +9,8 @@ export class BoardRepository extends Repository<Board> {
     super(Board, dataSource.createEntityManager());
   }
 
-  async getYourBoardByMatchIdUserId(
-    matchId: string,
-    userId: string
-  ) {
-    return await this
-      .createQueryBuilder('board')
+  async getYourBoardByMatchIdUserId(matchId: string, userId: string) {
+    return await this.createQueryBuilder('board')
       .select('board.row_number', 'row_number')
       .addSelect('board.column_number', 'column_number')
       .addSelect('board.piece', 'piece')
@@ -25,12 +21,8 @@ export class BoardRepository extends Repository<Board> {
       .getRawMany();
   }
 
-  async getOpponentBoardByMatchIdUserId(
-    matchId: string,
-    userId: string
-  ) {
-    return await this
-      .createQueryBuilder('board')
+  async getOpponentBoardByMatchIdUserId(matchId: string, userId: string) {
+    return await this.createQueryBuilder('board')
       .select('board.row_number', 'row_number')
       .addSelect('board.column_number', 'column_number')
       .addSelect(
@@ -41,28 +33,21 @@ export class BoardRepository extends Repository<Board> {
       .getRawMany();
   }
 
-  async getScoreByMatchId(
-    matchId: string
-  ) {
-    return await this
-    .createQueryBuilder('board')
-    .select('board.user_id', 'user_id')
-    .addSelect('18 - COUNT(*)', 'score')
-    .where(`board.match_id = '${matchId}'`)
-    .andWhere('board.hit = false and board.piece is NOT NULL')
-    .groupBy('board.user_id')
-    .getRawMany();
+  async getScoreByMatchId(matchId: string) {
+    return await this.createQueryBuilder('board')
+      .select('board.user_id', 'user_id')
+      .addSelect('COUNT(*)', 'score')
+      .where(`board.match_id = '${matchId}'`)
+      .andWhere('board.hit = true and board.piece is NOT NULL')
+      .groupBy('board.user_id')
+      .getRawMany();
   }
 
-  async getPiecesPlacedOnBoardByMatchIdUserId(
-    matchId: string,
-    userId: string
-  ) {
-    return await this
-      .createQueryBuilder('board')
+  async getPiecesPlacedOnBoardByMatchIdUserId(matchId: string, userId: string) {
+    return await this.createQueryBuilder('board')
       .where('board.match_id = :matchId', { matchId })
       .andWhere('board.user_id = :userId', { userId })
       .andWhere('board.piece IS NOT NULL')
-      .getCount()
+      .getCount();
   }
 }

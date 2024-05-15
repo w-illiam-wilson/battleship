@@ -5,19 +5,17 @@ import { Match } from '../entities/repository/match.entity';
 
 @Injectable()
 export class MatchRepository extends Repository<Match> {
-  constructor(private dataSource: DataSource)
-    {
-        super(Match, dataSource.createEntityManager());
-    }
-    
+  constructor(private dataSource: DataSource) {
+    super(Match, dataSource.createEntityManager());
+  }
+
   async getMatchesByUserIdFinishedMatchId(
     userId: string,
     finished: boolean,
     matchId: string,
     limit: number,
   ): Promise<Match[]> {
-    const query = this
-      .createQueryBuilder('match')
+    const query = this.createQueryBuilder('match')
       .select('match.match_id', 'match_id')
       .addSelect('match.match_time', 'match_time')
       .addSelect('match.player_one', 'player_one')

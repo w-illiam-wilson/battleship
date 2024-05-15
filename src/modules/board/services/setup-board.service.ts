@@ -1,11 +1,19 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/repository/board.entity';
-import { Heading, ShipPositionDTO, SetupDTO } from '../entities/dto/setup-dto.entity';
+import {
+  Heading,
+  ShipPositionDTO,
+  SetupDTO,
+} from '../entities/dto/setup-dto.entity';
 import { ShipPiece } from '../entities/util/ship-piece.entity';
 import { BoardRepository } from '../repositories/board.repository';
 import { MatchRepository } from 'src/modules/match/repositories/match.repository';
-import { MAX_COLUMN_POSITION, MAX_ROW_POSITION, SHIP_LENGTH } from '../board.constants';
+import {
+  MAX_COLUMN_POSITION,
+  MAX_ROW_POSITION,
+  SHIP_LENGTH,
+} from '../board.constants';
 
 @Injectable()
 export class SetupBoardService {
@@ -22,7 +30,7 @@ export class SetupBoardService {
         'Your board has already been setup',
         HttpStatus.CONFLICT,
       );
-    };
+    }
 
     const boardArray = this.placeShips(setup);
 
@@ -58,7 +66,11 @@ export class SetupBoardService {
     matchId: string,
     userId: string,
   ): Promise<boolean> {
-    const countPiecesPlaced = await this.boardRepository.getPiecesPlacedOnBoardByMatchIdUserId(matchId, userId);
+    const countPiecesPlaced =
+      await this.boardRepository.getPiecesPlacedOnBoardByMatchIdUserId(
+        matchId,
+        userId,
+      );
     return countPiecesPlaced === Object.keys(ShipPiece).length;
   }
 
@@ -68,7 +80,7 @@ export class SetupBoardService {
     );
 
     try {
-      setup.ships.forEach((ship) => this.placeShip(ship, shipArray))
+      setup.ships.forEach((ship) => this.placeShip(ship, shipArray));
     } catch (e) {
       throw new HttpException(
         'Ships overlap or go off the board in this setup',
@@ -79,10 +91,7 @@ export class SetupBoardService {
     return shipArray;
   }
 
-  private placeShip(
-    ship: ShipPositionDTO,
-    shipArray: ShipPiece[][]
-  ) {
+  private placeShip(ship: ShipPositionDTO, shipArray: ShipPiece[][]) {
     const shipLength = SHIP_LENGTH[ship.ship];
     const row = ship.row;
     const column = ship.column;
