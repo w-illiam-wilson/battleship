@@ -10,7 +10,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  async getUser(@Query() limitQuery: LimitQuery): Promise<User[]> {
+  async getUsers(@Query() limitQuery: LimitQuery): Promise<User[]> {
     return await this.userService.getUsers(limitQuery.limit);
   }
 
