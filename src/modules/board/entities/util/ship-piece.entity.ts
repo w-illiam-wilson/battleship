@@ -18,11 +18,3 @@ export enum ShipPiece {
   E1 = 'E1',
   E2 = 'E2',
 }
-
-export const ShipLength = {
-  A: 5,
-  B: 4,
-  C: 4,
-  D: 3,
-  E: 2
-}

@@ -2,12 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ClsService } from 'nestjs-cls';
 import { Board } from '../entities/repository/board.entity';
 import { Heading, ShipPositionDTO, SetupDTO } from '../entities/dto/setup-dto.entity';
-import { ShipLength, ShipPiece } from '../entities/util/ship-info.entity';
+import { ShipPiece } from '../entities/util/ship-piece.entity';
 import { BoardRepository } from '../repositories/board.repository';
 import { MatchRepository } from 'src/modules/match/repositories/match.repository';
-
-const MAX_ROW_POSITION = 9;
-const MAX_COLUMN_POSITION = 9;
+import { MAX_COLUMN_POSITION, MAX_ROW_POSITION, SHIP_LENGTH } from '../board.constants';
 
 @Injectable()
 export class SetupBoardService {
@@ -85,7 +83,7 @@ export class SetupBoardService {
     ship: ShipPositionDTO,
     shipArray: ShipPiece[][]
   ) {
-    const shipLength = ShipLength[ship.ship];
+    const shipLength = SHIP_LENGTH[ship.ship];
     const row = ship.row;
     const column = ship.column;
     const position = ship.position;
